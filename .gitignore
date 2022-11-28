@@ -1,2 +1,4 @@
 lesson2/lesson2.playground/playground.xcworkspace/xcuserdata/artemsolohin.xcuserdatad/UserInterfaceState.xcuserstate
 part2/lesson1/part2lesson1/part2lesson1.xcodeproj/project.xcworkspace/xcuserdata/artemsolohin.xcuserdatad/UserInterfaceState.xcuserstate
+*.xcodeproj/
+DerivedData/

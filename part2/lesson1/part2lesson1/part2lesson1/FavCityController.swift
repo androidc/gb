@@ -1,5 +1,5 @@
 //
-//  TableViewController1.swift
+//  FavCityController.swift
 //  part2lesson1
 //
 //  Created by Артем Солохин on 30.11.2022.
@@ -7,24 +7,17 @@
 
 import UIKit
 
-class TableViewController1: UITableViewController {
-
-
+class FavCityController: UITableViewController {
     
-    let friendsTestData:[FriendModel]  = [
-        FriendModel(image: UIImage.init(systemName: "figure.walk"), name: "Уася"),
-        FriendModel(image: UIImage.init(systemName: "person.2"), name: "Петя"),
-        FriendModel(image: UIImage.init(systemName: "person.wave.2"), name: "Костя"),
-        FriendModel(image: UIImage.init(systemName: "person.fill"), name: "Натаха"),
-        FriendModel(image: UIImage.init(systemName: "person.fill.turn.left"), name: "Вика"),
-        FriendModel(image: UIImage.init(systemName: "figure.stand"), name: "Рита")
-        
+    let cities = [
+        CityModelData(image: UIImage.init(systemName: "globe.americas") ,name: "Moscow"),
+        CityModelData(name: "SPB"),
+        CityModelData(name: "Kazan"),
+        CityModelData(name: "Perm")
     ]
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        view.backgroundColor = .yellow
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -42,21 +35,16 @@ class TableViewController1: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return friendsTestData.count
+        return cities.count
     }
 
-//
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "FriendCellId", for: indexPath) as? FriendCell else {
-            preconditionFailure("Friend cell not defined")
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "CityCellId", for: indexPath) as? CityCell else {
+            preconditionFailure("City cell not defined")
         }
-        
-        cell.imageFriend?.image =  friendsTestData[indexPath.row].image
-        cell.friendName.text = friendsTestData[indexPath.row].name
-        
-        
-       
-
+        cell.LabelCity.text = cities[indexPath.row].name
+        cell.CityImageView?.image = cities[indexPath.row].image
         // Configure the cell...
 
         return cell

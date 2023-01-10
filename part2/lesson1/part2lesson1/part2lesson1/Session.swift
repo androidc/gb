@@ -7,9 +7,12 @@
 
 import Foundation
 
+
 class Session {
     private init() {}
     static let sharedInstance = Session()
     var token: String = ""
     var userId: String = ""
 }
+
+

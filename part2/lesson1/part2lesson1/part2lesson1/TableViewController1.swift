@@ -9,7 +9,7 @@ import UIKit
 
 class TableViewController1: UITableViewController {
 
-
+ //
     
     let friendsTestData:[FriendModel]  = [
         FriendModel(image: UIImage.init(systemName: "figure.walk"), name: "Уася"),

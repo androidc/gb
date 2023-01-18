@@ -6,10 +6,13 @@
 //
 
 import UIKit
+import Alamofire
+
+
 
 class TableViewController1: UITableViewController {
 
-
+    let baseUrl = "https://api.vk.com"
     
     let friendsTestData:[FriendModel]  = [
         FriendModel(image: UIImage.init(systemName: "figure.walk"), name: "Уася"),
@@ -21,11 +24,147 @@ class TableViewController1: UITableViewController {
         
     ]
     
+    func getUsers() {
+       
+        let method = "/method/users.get"
+        
+        let param: Parameters = [
+            "user_ids":Session.sharedInstance.userId,
+            "access_token":Session.sharedInstance.token,
+            "v":"5.131"
+        ]
+        
+        let url = baseUrl + method
+        
+        AF.request(url, method: .get
+                   , parameters: param)
+            .responseJSON { res in
+                print(res)
+            }
+        
+    }
+   /**
+    Возвращает список идентификаторов друзей пользователя или расширенную информацию о друзьях пользователя (при использовании параметра fields).
+    
+     - Parameter order: Порядок, в котором нужно вернуть список друзей. Допустимые значения: hints, random, name
+     - Parameter count: Количество друзей, которое нужно вернуть.
+    - Parameter userId: id пользователя друзей которого надо вернуть, если не указан то возвращаются друзья текущего
+    
+    */
+    
+    func getFriends(order:String, count: Int, offset: Int? = 0, userId:Int?) {
+        let method = "/method/friends.get"
+        var param: Parameters = ["access_token":Session.sharedInstance.token]
+        if let userId = userId {
+            param = [
+                "access_token":Session.sharedInstance.token,
+                "user_id":userId,
+                "order":order,
+                "count":count,
+                "offset":offset,
+                "v":"5.131"
+       ]
+        } else {
+        param = [
+           "access_token":Session.sharedInstance.token,
+           "order":order,
+           "count":count,
+           "offset":offset,
+           "v":"5.131"
+       ]
+        }
+        
+        
+        
+        let url = baseUrl + method
+        
+        AF.request(url, method: .get
+                   , parameters: param)
+            .responseJSON { res in
+                print(res)
+            }
+        
+        
+        
+    }
+    /**
+     Возвращает список сообществ указанного пользователя.
+      - Parameter filter: Список фильтров сообществ, которые необходимо вернуть, перечисленные через запятую. (admin, editor, moder,publics etc)
+      - Parameter count: Количество сообществ, информацию о которых нужно вернуть.
+      - Parameter offset: Смещение, необходимое для выборки определённого подмножества сообществ.
+     */
+    
+    func getGroups (filter :String,count:Int,offset: Int? = 0, userId: Int?) {
+        
+        let method = "/method/groups.get"
+        var param: Parameters = ["access_token":Session.sharedInstance.token]
+        if let userId = userId {
+        param = [
+            "user_id":userId,
+            "access_token":Session.sharedInstance.token,
+            "filter":filter,
+            "count": count,
+            "offset": offset,
+            "v":"5.131"
+        ]
+        } else {
+        param = [
+
+            "access_token":Session.sharedInstance.token,
+            "filter":filter,
+            "count": count,
+            "offset": offset,
+            "v":"5.131"
+        ]
+        
+        }
+        
+        let url = baseUrl + method
+        
+        AF.request(url, method: .get
+                   , parameters: param)
+            .responseJSON { res in
+                print(res)
+            }
+        
+        
+    }
+    
+    /**
+     Осуществляет поиск сообществ по заданной подстроке.
+       - Parameter q: Текст поискового запроса
+       - Parameter count: Количество результатов поиска, которое необходимо вернуть.
+       - Parameter offset: Смещение, необходимое для выборки определённого подмножества результатов поиска. По умолчанию 0
+
+     */
+    func searchGroups(q:String, count:Int, offset:Int? = 0) {
+        let method = "/method/groups.search"
+        let param:Parameters = [
+            "access_token":Session.sharedInstance.token,
+            "q":q,
+            "count": count,
+            "offset": offset,
+            "v":"5.131"
+        ]
+        
+        let url = baseUrl + method
+        
+        AF.request(url, method: .get
+                   , parameters: param)
+            .responseJSON { res in
+                print(res)
+            }
+    }
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = .yellow
-
+        getUsers()
+        getFriends(order: "random", count: 100,userId: nil)
+        getGroups(filter: "", count: 5, userId: nil)
+        searchGroups(q: "программирование", count: 10)
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 

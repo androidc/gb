@@ -10,13 +10,11 @@ import Alamofire
 
 
 
-<<<<<<< HEAD
 class TableViewController1: UITableViewController {
 
     let baseUrl = "https://api.vk.com"
-=======
- //
->>>>>>> 7c5f9647bd2e786c13a0ead2f17d45a86108d47c
+
+
     
     let friendsTestData:[FriendModel]  = [
         FriendModel(image: UIImage.init(systemName: "figure.walk"), name: "Уася"),

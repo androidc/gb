@@ -7,6 +7,9 @@
 
 import UIKit
 import WebKit
+import Alamofire
+
+
 
 class LoginViewController: UIViewController {
 
@@ -14,6 +17,8 @@ class LoginViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        getWeather()
         
         webView.navigationDelegate = self
         
@@ -40,6 +45,23 @@ class LoginViewController: UIViewController {
 
 
 }
+
+func getWeather() {    let url = "http://lr-system.pro/rss/sbapi.php?q=valid"
+//    AF.request(url,method: .get).responseJSON { resp in
+//       // print(resp)
+//        if let data = resp.data {
+//            let json = try! JSONDecoder().decode(WeatherRoot.self, from: data)
+//            print(json)
+//        }
+  
+    AF.request(url,method: .get).responseDecodable(of: WeatherRoot.self) { resp in
+        print(resp)
+       }
+    
+    }
+
+
+
 
 extension LoginViewController:WKNavigationDelegate {
     

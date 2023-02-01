@@ -3,7 +3,7 @@
 //  part2lesson1
 //
 //  Created by Артем Солохин on 30.11.2022.
-//
+
 
 import UIKit
 import Alamofire

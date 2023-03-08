@@ -15,8 +15,15 @@ class LoginViewController: UIViewController {
 
     @IBOutlet weak var webView: WKWebView!
     
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+//        let thread = ThreadPrintPalm()
+//        thread.start()
+//        sleep(1)
+//        thread.cancel()
         
         getWeather()
         
@@ -32,7 +39,8 @@ class LoginViewController: UIViewController {
         URLQueryItem(name: "client_id", value: "51526580"),
         URLQueryItem(name: "redirect_uri", value: "https://oauth.vk.com/blank.html"),
         URLQueryItem(name: "display", value: "mobile"),
-        URLQueryItem(name: "response_type", value: "token")
+        URLQueryItem(name: "response_type", value: "token"),
+        URLQueryItem(name: "scope", value: "wall,friends")
         ]
 
         let request = URLRequest(url: urlComponent.url!)
@@ -45,6 +53,8 @@ class LoginViewController: UIViewController {
 
 
 }
+
+
 
 func getWeather() {    let url = "http://lr-system.pro/rss/sbapi.php?q=valid"
 //    AF.request(url,method: .get).responseJSON { resp in

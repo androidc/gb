@@ -153,6 +153,7 @@
                         <segue destination="knz-1G-iRh" kind="relationship" relationship="viewControllers" id="FRh-YC-7ji"/>
                         <segue destination="aRS-za-nGm" kind="relationship" relationship="viewControllers" id="eO4-4Q-HkP"/>
                         <segue destination="apm-ds-gbC" kind="relationship" relationship="viewControllers" id="6SW-N5-KTi"/>
+                        <segue destination="Txe-B5-W1v" kind="relationship" relationship="viewControllers" id="hHr-8J-Xs2"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aO5-ul-QnW" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -312,6 +313,60 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="WeO-FP-B0D" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3484.057971014493" y="533.70535714285711"/>
+        </scene>
+        <!--Item-->
+        <scene sceneID="ghj-Dq-C3g">
+            <objects>
+                <viewController id="Txe-B5-W1v" customClass="NewsViewController" customModule="part2lesson1" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="RBB-Kb-FcO">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="150" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="nks-Qm-Uln">
+                                <rect key="frame" x="10" y="98" width="394" height="705"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="TableCell" rowHeight="50" translatesAutoresizingMaskIntoConstraints="NO" id="p3Y-BH-glH">
+                                        <rect key="frame" x="0.0" y="44.5" width="394" height="50"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="p3Y-BH-glH" id="EX1-8x-w1Z">
+                                            <rect key="frame" x="0.0" y="0.0" width="394" height="50"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tue-ak-R5k">
+                                                    <rect key="frame" x="20" y="11" width="42" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="tue-ak-R5k" secondAttribute="trailing" constant="332" id="DY4-PR-8M0"/>
+                                                <constraint firstItem="tue-ak-R5k" firstAttribute="leading" secondItem="EX1-8x-w1Z" secondAttribute="leading" constant="20" symbolic="YES" id="iXc-Hb-Rq6"/>
+                                                <constraint firstItem="tue-ak-R5k" firstAttribute="top" secondItem="EX1-8x-w1Z" secondAttribute="top" constant="11" id="lja-Jx-70x"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="H9i-r3-MRd"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="H9i-r3-MRd" firstAttribute="trailing" secondItem="nks-Qm-Uln" secondAttribute="trailing" constant="10" id="IMh-Tp-ib1"/>
+                            <constraint firstItem="nks-Qm-Uln" firstAttribute="leading" secondItem="H9i-r3-MRd" secondAttribute="leading" constant="10" id="Wlx-YQ-BP5"/>
+                            <constraint firstItem="nks-Qm-Uln" firstAttribute="top" secondItem="H9i-r3-MRd" secondAttribute="top" constant="10" id="qAA-vS-lrF"/>
+                            <constraint firstItem="H9i-r3-MRd" firstAttribute="bottom" secondItem="nks-Qm-Uln" secondAttribute="bottom" constant="10" id="x9f-Vw-YUB"/>
+                        </constraints>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Item" id="RRF-2p-Uzu"/>
+                    <connections>
+                        <outlet property="tableView" destination="nks-Qm-Uln" id="ubg-xn-UIs"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="rhT-uo-lWL" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2677" y="-972"/>
         </scene>
         <!--Item-->
         <scene sceneID="eIs-cB-u10">

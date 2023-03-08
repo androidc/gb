@@ -31,7 +31,7 @@ class TableViewController1: UITableViewController {
         let method = "/method/users.get"
         
         let param: Parameters = [
-            "user_ids":Session.sharedInstance.userId,
+            "user_ids":"8553946",
             "access_token":Session.sharedInstance.token,
             "v":"5.131"
         ]
@@ -41,7 +41,12 @@ class TableViewController1: UITableViewController {
         AF.request(url, method: .get
                    , parameters: param)
             .responseJSON { res in
+               
                 print(res)
+                if let data = res.data {
+                    let users = try! JSONDecoder().decode(Response.self, from: data)
+                    print(users.response[0].firstName)
+                }
             }
         
     }
@@ -64,6 +69,7 @@ class TableViewController1: UITableViewController {
                 "order":order,
                 "count":count,
                 "offset":offset,
+                "fields":"first_name,last_name",
                 "v":"5.131"
        ]
         } else {
@@ -72,6 +78,7 @@ class TableViewController1: UITableViewController {
            "order":order,
            "count":count,
            "offset":offset,
+           "fields":"first_name,last_name",
            "v":"5.131"
        ]
         }
@@ -83,7 +90,12 @@ class TableViewController1: UITableViewController {
         AF.request(url, method: .get
                    , parameters: param)
             .responseJSON { res in
+                
                 print(res)
+                if let data = res.data {
+                    let friends = try! JSONDecoder().decode(ResponseFriendsRoot.self, from: data)
+                    print(friends.response.items[0].firstName)
+                }
             }
         
         
@@ -106,6 +118,7 @@ class TableViewController1: UITableViewController {
             "access_token":Session.sharedInstance.token,
             "filter":filter,
             "count": count,
+            "extended":true,
             "offset": offset,
             "v":"5.131"
         ]
@@ -116,6 +129,7 @@ class TableViewController1: UITableViewController {
             "filter":filter,
             "count": count,
             "offset": offset,
+            "extended":true,
             "v":"5.131"
         ]
         
@@ -126,6 +140,12 @@ class TableViewController1: UITableViewController {
         AF.request(url, method: .get
                    , parameters: param)
             .responseJSON { res in
+                
+                if let data = res.data {
+                    let groups = try! JSONDecoder().decode(ResponseGroupsRoot.self, from: data)
+                    print(groups.response.items[0].name)
+                }
+                
                 print(res)
             }
         
@@ -163,10 +183,10 @@ class TableViewController1: UITableViewController {
         super.viewDidLoad()
         
         view.backgroundColor = .yellow
-        getUsers()
-        getFriends(order: "random", count: 100,userId: nil)
-        getGroups(filter: "", count: 5, userId: nil)
-        searchGroups(q: "программирование", count: 10)
+       // getUsers()
+      //  getFriends(order: "random", count: 100,userId: nil)
+       // getGroups(filter: "", count: 10, userId: nil)
+      //  searchGroups(q: "программирование", count: 10)
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 

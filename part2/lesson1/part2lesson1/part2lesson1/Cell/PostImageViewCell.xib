@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19455" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="159" id="mTE-kS-H4U" customClass="PostImageViewCell" customModule="part2lesson1" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="535" height="159"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="mTE-kS-H4U" id="1sR-rj-AbC">
+                <rect key="frame" x="0.0" y="0.0" width="535" height="159"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="a2f-2e-uT8">
+                        <rect key="frame" x="10" y="10" width="515" height="139"/>
+                    </imageView>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="a2f-2e-uT8" firstAttribute="leading" secondItem="1sR-rj-AbC" secondAttribute="leading" constant="10" id="Gpl-eI-6cH"/>
+                    <constraint firstItem="a2f-2e-uT8" firstAttribute="top" secondItem="1sR-rj-AbC" secondAttribute="top" constant="10" id="LEp-7n-Ph2"/>
+                    <constraint firstAttribute="bottom" secondItem="a2f-2e-uT8" secondAttribute="bottom" constant="10" id="Wlo-1X-vrY"/>
+                    <constraint firstAttribute="trailing" secondItem="a2f-2e-uT8" secondAttribute="trailing" constant="10" id="sZa-NS-qdp"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="PostImageView" destination="a2f-2e-uT8" id="GSN-pK-mlV"/>
+            </connections>
+            <point key="canvasLocation" x="132.60869565217394" y="-124.88839285714285"/>
+        </tableViewCell>
+    </objects>
+</document>

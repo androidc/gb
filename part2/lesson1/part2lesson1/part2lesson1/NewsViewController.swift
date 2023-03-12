@@ -36,7 +36,7 @@ class NewsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-      getNews(count: 3, userId: nil)
+      getNews(count: 10, userId: nil)
        
         
         tableView.delegate = self
@@ -45,6 +45,9 @@ class NewsViewController: UIViewController {
         
         tableView.register(UINib(nibName: "CustomHeaderView", bundle: nil), forHeaderFooterViewReuseIdentifier: "CustomHeaderView")
         tableView.register(UINib(nibName: "CustomerFooterView", bundle: nil), forHeaderFooterViewReuseIdentifier: "CustomerFooterView")
+        let nib = UINib(nibName: "PostTextView", bundle: nil)
+        tableView.register(nib, forCellReuseIdentifier: "PostTextView")
+
 
         // Do any additional setup after loading the view.
         
@@ -108,7 +111,7 @@ class NewsViewController: UIViewController {
         if let userId = userId {
         param = [
             "access_token":Session.sharedInstance.token,
-            "filters":"post",
+            "filters":"photo",
             "user_id":userId,
             "count": count,
             "v":"5.131"
@@ -132,6 +135,7 @@ class NewsViewController: UIViewController {
                 print(res)
                 if let data = res.data {
                     let news = try! JSONDecoder().decode(NewsResponse.self, from: data)
+                    print(news)
                     self.newsresp = news
                     self.createDict(from: news)
                     self.tableView.reloadData()
@@ -178,19 +182,120 @@ extension NewsViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        var countOfCell = 0
     
         // количество строк в секции зависит от входящих данных
         
-        return 2
+        // если photo ! = nil , то мы возвращаем 1 ячейку с фотографией (одной самой первой, sizeType = x)
+        // если photo == nil, то
+        // -- если text не пустой, то возвращаем ячейку с текстом (+1)
+        // -- если в attachments есть photo, то возращаем ячейку с картинкой (+1)
+        
+        if let news = newsresp {
+            //print(news.response.items[section])
+            if news.response.items[section].photos != nil {
+                countOfCell += 1
+            }
+            
+            if news.response.items[section].photos == nil {
+                if news.response.items[section].text != "" {
+                    countOfCell += 1
+                }
+                
+                if news.response.items[section].attachments[0].type == "photo" {
+                    countOfCell += 1
+                }
+            }
+            
+        }
+     
+        
+      
+        
+        print("countOfCell: \(countOfCell)")
+        return countOfCell
     }
     
+    
+//countOfCell: 1
+//countOfCell: 2
+//countOfCell: 2
+//Optional("А я то думал почему ко мне в гости никто не приходит")
+//Optional("У Илона Маска спросили, какую компьютерную игру он может порекомендовать. Он ответил, что ремейк Dead Space – хорош.")
+//Optional("")
+//indexPath.row 0 text: Optional("А я то думал почему ко мне в гости никто не приходит")
+//indexPath.section 0
+//indexPath.row 1 text: Optional("У Илона Маска спросили, какую компьютерную игру он может порекомендовать. Он ответил, что ремейк Dead Space – хорош.")
+//indexPath.section 0
+//indexPath.row 0 text: Optional("А я то думал почему ко мне в гости никто не приходит")
+//indexPath.section 1
+//indexPath.row 1 text: Optional("У Илона Маска спросили, какую компьютерную игру он может порекомендовать. Он ответил, что ремейк Dead Space – хорош.")
+//indexPath.section 1
+
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    let cell = tableView.dequeueReusableCell(withIdentifier: "TableCell", for: indexPath)
+        
+        var postCell:PostTextViewCell?
+        
+        // sectionCount = 2. возвращать надо в row = 0 текст, а в  row = 1 возвращать image
+        
+        // если indexPath.row == 0 мы возвращаем текст. А индекс для текста берем из indexPath.section
+        // если indexPath.row == 1 мы возвращаем другую ячейку с картинкой. А индекс для картинки берем из indexPath.section?
+        
+        
+        if let news = newsresp {
+            if news.response.items[indexPath.row].photos == nil {
+                if news.response.items[indexPath.row].text != "" {
+                    if indexPath.row == 0 {
+                        let cell = tableView.dequeueReusableCell(withIdentifier: "PostTextView", for: indexPath) as! PostTextViewCell
+                        cell.PostTextView.text = news.response.items[indexPath.section].text
+                        postCell = cell
+                        print("indexPath.row \(indexPath.row) text: \(news.response.items[indexPath.row].text)")
+                    }
+                }
+                
+                if news.response.items[indexPath.section].attachments[0].type == "photo" {
+                    if indexPath.row == 1 {
+                        let cell = tableView.dequeueReusableCell(withIdentifier: "PostTextView", for: indexPath) as! PostTextViewCell
+                        cell.PostTextView.text = "здесь будет ячейка с картинкой"
+                        postCell = cell
+                        print("indexPath.row \(indexPath.row) text: ячейка с картинкой")
+                    }
+                }
+            }
+        }
+        
+        
+        
+//        if let news = newsresp {
+//            if news.response.items[indexPath.row].photos == nil {
+//                if news.response.items[indexPath.row].text != "" {
+//                    let cell = tableView.dequeueReusableCell(withIdentifier: "PostTextView", for: indexPath) as! PostTextViewCell
+//                    cell.PostTextView.text = news.response.items[indexPath.row].text
+//                    postCell = cell
+//                    print("indexPath.row \(indexPath.row) text: \(news.response.items[indexPath.row].text)")
+//                } else {
+//                    let cell = tableView.dequeueReusableCell(withIdentifier: "PostTextView", for: indexPath) as! PostTextViewCell
+//                    cell.PostTextView.text = "текста нет!"
+//                    postCell = cell
+//                    print("indexPath.row \(indexPath.row) text: \(news.response.items[indexPath.row].text)")
+//                }
+//            }
+//        }
+//
+//        print("indexPath.section \(indexPath.section)")
+        
+        return postCell!
+   // let cell = tableView.dequeueReusableCell(withIdentifier: "TableCell", for: indexPath)
         
        
-    cell.textLabel?.text = "IndexPath \(indexPath.row)"
-    return cell
+   // cell.textLabel?.text = "IndexPath \(indexPath.row)"
+    //return cell
     }
+    
+    
+    
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
     let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "CustomHeaderView") as! CustomerHeaderView

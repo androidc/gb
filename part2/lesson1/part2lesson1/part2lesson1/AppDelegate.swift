@@ -2,7 +2,7 @@
 //  AppDelegate.swift
 //  part2lesson1
 //
-//  Created by Артем Солохин on 28.11.2022.
+//  Created by Артем  on 28.11.2022.
 //
 
 import UIKit

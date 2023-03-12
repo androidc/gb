@@ -1,24 +1,16 @@
-//
-//  FriendCell.swift
-//  part2lesson1
-//
-//  Created by Артем  on 19.12.2022.
-//
+//Created by chizztectep on 12.03.2023 
 
 import UIKit
 
-class FriendCell: UITableViewCell {
+class PostImageViewCell: UITableViewCell {
 
+    @IBOutlet weak var PostImageView: UIImageView!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
     }
-    
-    @IBOutlet weak var imageFriend: UIImageView!
-    
-    
-    @IBOutlet weak var friendName: UILabel!
-    
+
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 

@@ -2,7 +2,7 @@
 //  Session.swift
 //  part2lesson1
 //
-//  Created by Артем Солохин on 10.01.2023.
+//  Created by Артем  on 10.01.2023.
 //
 
 import Foundation

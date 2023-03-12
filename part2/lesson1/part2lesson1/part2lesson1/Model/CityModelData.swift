@@ -2,7 +2,7 @@
 //  CityModelData.swift
 //  part2lesson1
 //
-//  Created by Артем Солохин on 10.12.2022.
+//  Created by Артем  on 10.12.2022.
 //
 
 import UIKit

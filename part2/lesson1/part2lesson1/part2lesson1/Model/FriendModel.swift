@@ -2,7 +2,7 @@
 //  FriendModel.swift
 //  part2lesson1
 //
-//  Created by Артем Солохин on 19.12.2022.
+//  Created by Артем  on 19.12.2022.
 //
 
 import UIKit

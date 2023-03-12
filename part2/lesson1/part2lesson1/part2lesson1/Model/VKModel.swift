@@ -2,7 +2,7 @@
 //  VKModel.swift
 //  part2lesson1
 //
-//  Created by Артем Солохин on 15.02.2023.
+//  Created by on 15.02.2023.
 //
 
 import Foundation
@@ -164,6 +164,7 @@ class ResponseNewsItemsLight: Decodable {
     var text:String? = ""
     var attachments:[Attachments] = []
     var dateString = ""
+    var photos:Photos?
     
     
      
@@ -176,6 +177,7 @@ class ResponseNewsItemsLight: Decodable {
         case views
         case text
         case attachments
+        case photos
       
     }
     
@@ -255,6 +257,12 @@ class ResponseNewsItemsLight: Decodable {
         catch {
             self.attachments = []
         }
+        
+        do {
+            self.photos = try values.decode(Photos.self, forKey: .photos)
+        } catch {
+            self.photos = nil
+        }
       
       
             
@@ -312,3 +320,119 @@ class ResponseNewsGroups: Decodable {
     
 }
 
+
+class Photos: Decodable {
+    var count = 0
+    var items:[PhotoItems] = []
+    
+    enum CodingKeys: String, CodingKey {
+        case count
+        case items
+    }
+    
+    convenience required init(from decoder: Decoder) throws {
+        self.init()
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        
+        self.count = try values.decode(Int.self, forKey: .count)
+       
+        do {
+    
+            self.items = try values.decode([PhotoItems].self, forKey: .items)
+        }
+        catch {
+            self.items = []
+        }
+    }
+    
+    
+}
+
+class PhotoItems: Decodable {
+    var likes_count = 0
+    var comments_count = 0
+    var reposts_count = 0
+    
+    var sizes:[PhotoSizes] = []
+     
+    enum CodingKeys: String, CodingKey {
+        case sizes
+        case likes
+        case comments
+        case reposts
+    }
+    
+    enum LikesKeys: String, CodingKey {
+        case count
+    }
+    
+    enum CommentsKeys: String, CodingKey {
+        case count
+    }
+    
+    enum RepostsKeys: String, CodingKey {
+        case count
+    }
+    
+    convenience required init(from decoder: Decoder) throws {
+        self.init()
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+       
+        do {
+            self.sizes = try values.decode([PhotoSizes].self, forKey: .sizes)
+        }
+        catch {
+            self.sizes = []
+        }
+        
+        // get count of likes
+        do {
+            let likes = try values.nestedContainer(keyedBy: LikesKeys.self, forKey: .likes)
+            self.likes_count = try likes.decode(Int.self, forKey: .count)
+        } catch {
+            self.likes_count = 0
+        }
+        
+        // get count of comments
+        do {
+            let comments = try values.nestedContainer(keyedBy: CommentsKeys.self, forKey: .comments)
+            self.comments_count = try comments.decode(Int.self, forKey: .count)
+        } catch {
+            self.comments_count = 0
+        }
+       
+       
+       
+        // get count of reposts
+        do {
+            let reposts = try values.nestedContainer(keyedBy: RepostsKeys.self, forKey: .reposts)
+            self.reposts_count = try reposts.decode(Int.self, forKey: .count)
+        } catch {
+            self.reposts_count = 0
+        }
+        
+        
+        
+    }
+    
+}
+
+class PhotoSizes: Decodable {
+    var  type: String = ""
+    var  url: String = ""
+    
+    enum CodingKeys: String, CodingKey {
+        case type
+        case url
+    }
+    
+   
+    
+    convenience required init(from decoder: Decoder) throws {
+        self.init()
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        self.type = try values.decode(String.self, forKey: .type)
+        self.url = try values.decode(String.self, forKey: .url)
+    }
+    
+}

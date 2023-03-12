@@ -2,7 +2,7 @@
 //  LoginViewController.swift
 //  part2lesson1
 //
-//  Created by Артем Солохин on 15.01.2023.
+//  Created by Артем  on 15.01.2023.
 //
 
 import UIKit
@@ -93,8 +93,9 @@ extension LoginViewController:WKNavigationDelegate {
             }
         
         let token = params["access_token"]
+        print(token)
         Session.sharedInstance.token = token!
-        Session.sharedInstance.userId = "51526580"
+        Session.sharedInstance.userId = "0000"
         
         performSegue(withIdentifier: "openMainTabBarFromLogin", sender: nil)
         

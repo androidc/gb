@@ -2,7 +2,7 @@
 //  WeatherModel.swift
 //  part2lesson1
 //
-//  Created by Артем Солохин on 01.02.2023.
+//  Created by Артем  on 01.02.2023.
 //
 
 import Foundation

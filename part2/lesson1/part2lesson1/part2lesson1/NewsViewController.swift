@@ -36,7 +36,7 @@ class NewsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-      getNews(count: 10, userId: nil)
+      getNews(count: 10 , userId: nil)
        
         
         tableView.delegate = self

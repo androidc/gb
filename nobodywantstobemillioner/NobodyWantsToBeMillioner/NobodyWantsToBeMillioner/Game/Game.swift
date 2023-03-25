@@ -4,13 +4,12 @@ import Foundation
 
 class Game {
     var gameSession: GameSession?
+    private(set) var records:[Record] = []
     
     static let shared = Game()
     
-    // вернем процент правильных ответов вычисляемым свойством
-    
-//    var winPercent: Double = {
-//        return gameSession?.questionId / 100 *
-//    }()
-    // нужно добавить в GameSession количество вопросов 
+    func addRecord(_ record: Record) {
+        records.append(record)
+    }
+ 
 }

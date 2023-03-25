@@ -8,7 +8,7 @@ import UIKit
 class GameScreenViewController: UIViewController {
     
   
-   
+    weak var gameSessionDelegate: GameSessionDelegate?
     
     
     // инициализируем базу вопросов и ответов
@@ -55,15 +55,22 @@ class GameScreenViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+       
+        
         // создаем сессию, начальная ставка = 100 , id вопроса = 1
         let gameSession = GameSession()
         
         Game.shared.gameSession = gameSession
         
-        // передаем в GameSession через делегат QA
-        Game.shared.gameSession?.qa = staticQA
-        
       
+        //Game.shared.gameSession?.qa = staticQA
+        
+        gameSessionDelegate = Game.shared.gameSession
+        
+        gameSessionDelegate?.setQA(qa: staticQA)
+        
+        
+        
         
 //
       //  Game.shared.gameSession?.questionsCount = staticQA.questions.count
@@ -111,12 +118,17 @@ class GameScreenViewController: UIViewController {
     
     private func restartGame() {
         
-        // возвращаем текущий gameSession в начальные значения и обновлям вопрос
-       // self.gameSession.questionId = 0
-        Game.shared.gameSession?.questionId = 0
+        // сохраняем рекорд в Game
+        let score = gameSessionDelegate?.getQuestionId()
+        let record = Record(date: Date(), score: score ?? 0)
+        Game.shared.addRecord(record)
         
-        //self.gameSession.currentValue = 100
-        Game.shared.gameSession?.currentValue = 100
+        
+        // возвращаем текущий gameSession в начальные значения и обновлям вопрос
+      
+        gameSessionDelegate?.setQuestionId(id: 0)
+  
+        gameSessionDelegate?.setCurrentValue(value: 100)
         // устанавливаем первый вопрос
         setQuestion(question: staticQA.questions[0], answers: staticQA.getAnswersByQuestionId(questionId: 0))
         
@@ -124,7 +136,7 @@ class GameScreenViewController: UIViewController {
     
     private func obrabotkaOtveta(atIndex index: Int) {
        // let questionId = self.gameSession.questionId
-        let questionId = Game.shared.gameSession?.questionId ?? 0
+        var questionId = Game.shared.gameSession?.questionId ?? 0
         let answers = self.staticQA.getAnswersByQuestionId(questionId: questionId)
          // если выбрали неправильный ответ, то выдаем алерт
          if !answers[index].bingo {
@@ -136,10 +148,10 @@ class GameScreenViewController: UIViewController {
               Game.shared.gameSession?.currentValue += 100
               
              // self.gameSession.questionId += 1
-              Game.shared.gameSession?.questionId += 1
+              questionId += 1
+              self.gameSessionDelegate?.setQuestionId(id: questionId)
               
-              let questionId = Game.shared.gameSession?.questionId ?? 0
-              
+             
               if questionId < self.staticQA.questions.count {
                   setQuestion(question: staticQA.questions[questionId], answers: staticQA.getAnswersByQuestionId(questionId: questionId))
               } else {

@@ -10,9 +10,17 @@ class GameScreenViewController: UIViewController {
   
     weak var gameSessionDelegate: GameSessionDelegate?
     
+    // глобальная переменная для прохода по qa.questions
+    var qPosition:Int = 0
+    
+    
+    // MARK: - Strategy
+    private let qaStrategy:ChoosenStrategy = .randomStrategy
     
     // инициализируем базу вопросов и ответов
-    let staticQA = StaticQA()
+   // let staticQA = StaticQA()
+    
+    var qa: StaticQA?
     
   
     
@@ -48,8 +56,7 @@ class GameScreenViewController: UIViewController {
         obrabotkaOtveta(atIndex: 3)
     }
     
-    
-    
+   
     
     // MARK: - ViewDidLoad
     override func viewDidLoad() {
@@ -67,7 +74,13 @@ class GameScreenViewController: UIViewController {
         
         gameSessionDelegate = Game.shared.gameSession
         
-        gameSessionDelegate?.setQA(qa: staticQA)
+        // в соответсвии от выбранной стратегии возвращаем qa
+    
+        self.qa = getQaStrategy(strategy: qaStrategy)
+        guard let qa = self.qa else {return}
+        gameSessionDelegate?.setQA(qa: qa)
+        
+        gameSessionDelegate?.setQuestionPosition(id: 0)
         
         
         
@@ -78,7 +91,7 @@ class GameScreenViewController: UIViewController {
 //        gameDelegate?.setupQuestionCount(withResult: staticQA.questions.count)
 //
         // устанавливаем первый вопрос
-        setQuestion(question: staticQA.questions[0], answers: staticQA.getAnswersByQuestionId(questionId: 0))
+        setQuestion(question: qa.questions[0])
         
         
         
@@ -89,9 +102,12 @@ class GameScreenViewController: UIViewController {
     }
     
     
+   
     // MARK: - private functions
-    private func setQuestion(question: Questions, answers: [Answers]) {
+    private func setQuestion(question: Questions) {
         self.QuestionLabel.text = question.text
+        guard let answers = self.qa?.getAnswersByQuestionId(questionId: question.id) else {return}
+        
 //        self.Answer1Text.titleLabel?.text = answers[0].text
 //        self.Answer2Text.titleLabel?.text = answers[1].text
 //        self.Answer3Text.titleLabel?.text = answers[2].text
@@ -119,25 +135,31 @@ class GameScreenViewController: UIViewController {
     private func restartGame() {
         
         // сохраняем рекорд в Game
-        let score = gameSessionDelegate?.getQuestionId()
+        let score = gameSessionDelegate?.getQuestionPosition()
         let record = Record(date: Date(), score: score ?? 0)
         Game.shared.addRecord(record)
         
         
         // возвращаем текущий gameSession в начальные значения и обновлям вопрос
       
-        gameSessionDelegate?.setQuestionId(id: 0)
+        //gameSessionDelegate?.setQuestionId(id: 0)
+        
+        guard let qa = self.qa else {return}
+        gameSessionDelegate?.setQuestionPosition(id: 0)
   
         gameSessionDelegate?.setCurrentValue(value: 100)
         // устанавливаем первый вопрос
-        setQuestion(question: staticQA.questions[0], answers: staticQA.getAnswersByQuestionId(questionId: 0))
+       
+        setQuestion(question: qa.questions[0])
         
     }
     
     private func obrabotkaOtveta(atIndex index: Int) {
        // let questionId = self.gameSession.questionId
-        var questionId = Game.shared.gameSession?.questionId ?? 0
-        let answers = self.staticQA.getAnswersByQuestionId(questionId: questionId)
+        // здесь будет храниться текущая позиция вопроса
+        var questionId = Game.shared.gameSession?.questionPosition ?? 0
+        guard let qa = self.qa else {return}
+        let answers = qa.getAnswersByQuestionId(questionId: qa.questions[questionId].id)
          // если выбрали неправильный ответ, то выдаем алерт
          if !answers[index].bingo {
              CreateAlert()
@@ -149,11 +171,14 @@ class GameScreenViewController: UIViewController {
               
              // self.gameSession.questionId += 1
               questionId += 1
-              self.gameSessionDelegate?.setQuestionId(id: questionId)
+              self.gameSessionDelegate?.setQuestionPosition(id: questionId)
+              
+            
               
              
-              if questionId < self.staticQA.questions.count {
-                  setQuestion(question: staticQA.questions[questionId], answers: staticQA.getAnswersByQuestionId(questionId: questionId))
+              if questionId < qa.questions.count {
+                  let qID = qa.questions[questionId].id
+                  setQuestion(question: qa.questions[questionId])
               } else {
                   CreateEndAlert()
                   restartGame()
@@ -161,7 +186,16 @@ class GameScreenViewController: UIViewController {
           }
     }
     
-    
+    private func getQaStrategy (strategy: ChoosenStrategy) -> StaticQA {
+        switch strategy {
+        case .staticStrategy:
+            let strategy = StaticQAStrategy()
+            return strategy.setQA()
+        case .randomStrategy:
+            let strategy = RandomQAStrategy()
+            return strategy.setQA()
+        }
+    }
     
 
 }

@@ -8,10 +8,10 @@ import UIKit
 
 
 protocol GameSessionDelegate : AnyObject {
-    func setQuestionId(id: Int)
+    func setQuestionPosition(id: Int)
     func setQA(qa: StaticQA)
     func setCurrentValue(value: Int)
-    func getQuestionId() -> Int
+    func getQuestionPosition() -> Int
 }
 
 /** класс для хранения состояния текущей игры */
@@ -19,14 +19,14 @@ class GameSession {
     //  при создании класса начальная ставка
     var currentValue: Int = 100
     // начальный номер вопроса = 1
-    var questionId: Int = 0
+    var questionPosition: Int = 0
     var qa: StaticQA?
 
     
     
     func winPercent() -> Int? {
       guard let qa = qa else {return nil}
-      return questionId/100 * qa.questions.count
+      return questionPosition/100 * qa.questions.count
     }
     
 
@@ -35,8 +35,8 @@ class GameSession {
 }
 
 extension GameSession: GameSessionDelegate {
-    func setQuestionId(id: Int) {
-        self.questionId = id
+    func setQuestionPosition(id: Int) {
+        self.questionPosition = id
     }
     
     func setQA(qa: StaticQA) {
@@ -47,8 +47,8 @@ extension GameSession: GameSessionDelegate {
         self.currentValue = value
     }
     
-    func getQuestionId() -> Int {
-        return self.questionId
+    func getQuestionPosition() -> Int {
+        return self.questionPosition
     }
     
     

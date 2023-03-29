@@ -95,7 +95,9 @@ class StaticQA {
         
     }
     
+    
     //MARK: - functions
+    
     
     func getAnswersByQuestionId(questionId: Int) -> [Answers] {
         var answers: [Answers] = []

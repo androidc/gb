@@ -10,12 +10,14 @@ class GameScreenViewController: UIViewController {
   
     weak var gameSessionDelegate: GameSessionDelegate?
     
+    private var alerts: Alerts?
+    
     // глобальная переменная для прохода по qa.questions
     var qPosition:Int = 0
     
     
     // MARK: - Strategy
-    private let qaStrategy:ChoosenStrategy = .randomStrategy
+    private var qaStrategy:ChoosenStrategy = .randomStrategy
     
     // инициализируем базу вопросов и ответов
    // let staticQA = StaticQA()
@@ -37,6 +39,12 @@ class GameScreenViewController: UIViewController {
     
     
     @IBOutlet weak var Answer4Text: UIButton!
+    
+    @IBOutlet weak var questionNumberText: UILabel!
+    
+    @IBOutlet weak var percentText: UILabel!
+    
+    // MARK: - Actions
     
     @IBAction func Answer1Action(_ sender: Any) {
        // print(Answer1Text.titleLabel?.text)
@@ -62,12 +70,21 @@ class GameScreenViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-       
+        // инициализация класса с алертами
+        self.alerts = Alerts(view: self)
         
         // создаем сессию, начальная ставка = 100 , id вопроса = 1
         let gameSession = GameSession()
         
         Game.shared.gameSession = gameSession
+        
+        // добавим Observer к questionPosition
+        gameSession.questionPosition.addObserver(self, options: [.new, .initial]) { [weak self] (questionPosition, _) in
+            
+            self?.questionNumberText.text = "Номер вопроса: \(questionPosition)"
+            self?.percentText.text = "Процент выполнения: \(String(describing: gameSession.winPercent() ?? 0))"
+            
+        }
         
       
         //Game.shared.gameSession?.qa = staticQA
@@ -75,6 +92,14 @@ class GameScreenViewController: UIViewController {
         gameSessionDelegate = Game.shared.gameSession
         
         // в соответсвии от выбранной стратегии возвращаем qa
+        
+        // берем qaStrategy из синглтона. по умолчанию там .staticStrategy
+        
+        qaStrategy = Game.shared.choosenStrategy
+        
+       // qaStrategy = Game.shared.gameSession?.choosenStrategy ?? .staticStrategy
+        
+        
     
         self.qa = getQaStrategy(strategy: qaStrategy)
         guard let qa = self.qa else {return}
@@ -101,7 +126,7 @@ class GameScreenViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
     
-    
+   
    
     // MARK: - private functions
     private func setQuestion(question: Questions) {
@@ -118,19 +143,7 @@ class GameScreenViewController: UIViewController {
         self.Answer4Text.setTitle(answers[3].text, for: .normal)
     }
     
-    private func CreateAlert() {
-        let alert = UIAlertController(title: "Неверный ответ", message: "Вы проиграли", preferredStyle: UIAlertController.Style.alert)
-        // add an action (button)
-        alert.addAction(UIAlertAction(title: "в следующий раз повезет", style: UIAlertAction.Style.default, handler: nil))
-        self.present(alert, animated: true, completion: nil)
-    }
-    
-    private func CreateEndAlert() {
-        let alert = UIAlertController(title: "Победа!", message: "Вы выиграли миллион", preferredStyle: UIAlertController.Style.alert)
-        // add an action (button)
-        alert.addAction(UIAlertAction(title: "а где деньги?!", style: UIAlertAction.Style.default, handler: nil))
-        self.present(alert, animated: true, completion: nil)
-    }
+   
     
     private func restartGame() {
         
@@ -157,12 +170,12 @@ class GameScreenViewController: UIViewController {
     private func obrabotkaOtveta(atIndex index: Int) {
        // let questionId = self.gameSession.questionId
         // здесь будет храниться текущая позиция вопроса
-        var questionId = Game.shared.gameSession?.questionPosition ?? 0
+        var questionId = Game.shared.gameSession?.questionPosition.value ?? 0
         guard let qa = self.qa else {return}
         let answers = qa.getAnswersByQuestionId(questionId: qa.questions[questionId].id)
          // если выбрали неправильный ответ, то выдаем алерт
          if !answers[index].bingo {
-             CreateAlert()
+             alerts!.CreateAlert()
              restartGame()
           }    else {
               // если все ок, то увеличиваем ставку и меняем вопросы и увеличиваем номер вопроса на 1
@@ -180,7 +193,7 @@ class GameScreenViewController: UIViewController {
                   let qID = qa.questions[questionId].id
                   setQuestion(question: qa.questions[questionId])
               } else {
-                  CreateEndAlert()
+                  alerts!.CreateEndAlert()
                   restartGame()
               }
           }
@@ -196,6 +209,9 @@ class GameScreenViewController: UIViewController {
             return strategy.setQA()
         }
     }
+    
+
+    
     
 
 }

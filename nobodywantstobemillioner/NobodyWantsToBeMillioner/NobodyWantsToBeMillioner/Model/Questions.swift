@@ -4,7 +4,7 @@
 
 import Foundation
 
-struct Questions {
+struct Questions:Codable {
     let id: Int
     let text: String
 }

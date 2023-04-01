@@ -12,6 +12,8 @@ protocol GameSessionDelegate : AnyObject {
     func setQA(qa: StaticQA)
     func setCurrentValue(value: Int)
     func getQuestionPosition() -> Int
+    func setChoosenStrategy(strategy: ChoosenStrategy)
+   
 }
 
 /** класс для хранения состояния текущей игры */
@@ -19,14 +21,18 @@ class GameSession {
     //  при создании класса начальная ставка
     var currentValue: Int = 100
     // начальный номер вопроса = 1
-    var questionPosition: Int = 0
+    var questionPosition = Observable<Int>(0)
     var qa: StaticQA?
+    var choosenStrategy: ChoosenStrategy = .staticStrategy
+    
+    
 
     
     
-    func winPercent() -> Int? {
-      guard let qa = qa else {return nil}
-      return questionPosition/100 * qa.questions.count
+    func winPercent() -> Double? {
+        guard let qa = self.qa else {return nil}
+        let q:Double = Double(self.questionPosition.value)/Double(qa.questions.count) * 100
+        return q.rounded(.towardZero)
     }
     
 
@@ -35,8 +41,13 @@ class GameSession {
 }
 
 extension GameSession: GameSessionDelegate {
+    
+    func setChoosenStrategy(strategy: ChoosenStrategy) {
+        self.choosenStrategy = strategy
+    }
+    
     func setQuestionPosition(id: Int) {
-        self.questionPosition = id
+        self.questionPosition.value = id
     }
     
     func setQA(qa: StaticQA) {
@@ -48,7 +59,7 @@ extension GameSession: GameSessionDelegate {
     }
     
     func getQuestionPosition() -> Int {
-        return self.questionPosition
+        return self.questionPosition.value
     }
     
     

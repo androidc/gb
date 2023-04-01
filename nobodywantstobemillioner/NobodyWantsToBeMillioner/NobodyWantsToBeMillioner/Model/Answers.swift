@@ -4,7 +4,7 @@
 
 import Foundation
 
-struct Answers {
+struct Answers: Codable {
     let questionId: Int
     let id: Int
     let text: String

@@ -3,6 +3,7 @@
 import UIKit
 
 // v.1.0.0
+// v.1.0.1 - hw pattern l2 strategy, facade, observer, builder
 
 
 class GameScreenViewController: UIViewController {

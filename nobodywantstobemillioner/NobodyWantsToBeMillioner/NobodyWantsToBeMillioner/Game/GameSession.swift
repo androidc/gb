@@ -1,6 +1,7 @@
 //Created by chizztectep on 25.03.2023
 
 // v.1.0.0
+// v.1.0.1 - hw pattern l2 strategy, facade, observer, builder
 
 import Foundation
 import UIKit

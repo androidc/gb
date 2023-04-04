@@ -1,4 +1,5 @@
-//Created by chizztectep on 29.03.2023 
+//Created by chizztectep on 29.03.2023
+// v.1.0.1 - hw pattern l2 strategy, facade, observer, builder
 
 import Foundation
 

@@ -24,6 +24,7 @@ class GameSession {
     var questionPosition = Observable<Int>(0)
     var qa: StaticQA?
     var choosenStrategy: ChoosenStrategy = .staticStrategy
+    var hintUsageFacade: HintUsageFacade?
     
     
 
@@ -48,10 +49,15 @@ extension GameSession: GameSessionDelegate {
     
     func setQuestionPosition(id: Int) {
         self.questionPosition.value = id
+        self.hintUsageFacade?.currentQuestion = id
+    
     }
     
     func setQA(qa: StaticQA) {
         self.qa = qa
+        self.hintUsageFacade = HintUsageFacade(qa: qa)
+        
+        
     }
     
     func setCurrentValue(value: Int) {

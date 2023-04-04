@@ -44,6 +44,13 @@ class GameScreenViewController: UIViewController {
     
     @IBOutlet weak var percentText: UILabel!
     
+    @IBOutlet weak var callFriend: UIButton!
+    
+    @IBOutlet weak var auditoryHelp: UIButton!
+    
+    @IBOutlet weak var fiftyFifty: UIButton!
+    
+    
     // MARK: - Actions
     
     @IBAction func Answer1Action(_ sender: Any) {
@@ -64,7 +71,72 @@ class GameScreenViewController: UIViewController {
         obrabotkaOtveta(atIndex: 3)
     }
     
-   
+    
+    @IBAction func CallFriendAction(_ sender: Any) {
+        let friendAnswer = Game.shared.gameSession?.hintUsageFacade?.callFriend()
+        
+        callFriend.isEnabled = false
+        
+        switch friendAnswer {
+            case 0: self.Answer1Text.setTitle("\(self.Answer1Text.titleLabel!.text!)!!!", for: .normal)
+            case 1: self.Answer2Text.setTitle("\(self.Answer2Text.titleLabel!.text!)!!!", for: .normal)
+            case 2: self.Answer3Text.setTitle("\(self.Answer3Text.titleLabel!.text!)!!!", for: .normal)
+            case 3: self.Answer4Text.setTitle("\(self.Answer4Text.titleLabel!.text!)!!!", for: .normal)
+        default:
+            break
+        }
+        
+    }
+    
+    
+    @IBAction func AuditoryHelpAction(_ sender: Any) {
+        
+        let auditoryAnswer = Game.shared.gameSession?.hintUsageFacade?.AuditoryHelp()
+        
+        auditoryHelp.isEnabled = false
+        
+        switch auditoryAnswer {
+            case 0: self.Answer1Text.setTitle("\(self.Answer1Text.titleLabel!.text!)!!!", for: .normal)
+            case 1: self.Answer2Text.setTitle("\(self.Answer2Text.titleLabel!.text!)!!!", for: .normal)
+            case 2: self.Answer3Text.setTitle("\(self.Answer3Text.titleLabel!.text!)!!!", for: .normal)
+            case 3: self.Answer4Text.setTitle("\(self.Answer4Text.titleLabel!.text!)!!!", for: .normal)
+        default:
+            break
+        }
+        
+    }
+    
+    
+    @IBAction func FiftyFiftyAction(_ sender: Any) {
+        
+        let fiftyFifty:[Int] = Game.shared.gameSession?.hintUsageFacade?.fiftyFifty() ?? [0]
+        
+        self.fiftyFifty.isEnabled = false
+        
+        if fiftyFifty == [0] {
+            // alert что что-то пошло не так
+        } else {
+            print(fiftyFifty)
+            if fiftyFifty.contains(0) {
+                self.Answer1Text.setTitle("\(self.Answer1Text.titleLabel!.text!) NONONO", for: .normal)
+                
+            }
+            if fiftyFifty.contains(1) {
+                self.Answer2Text.setTitle("\(self.Answer2Text.titleLabel!.text!) NONONO", for: .normal)
+            }
+            if fiftyFifty.contains(2) {
+                self.Answer3Text.setTitle("\(self.Answer3Text.titleLabel!.text!) NONONO", for: .normal)
+            }
+            if fiftyFifty.contains(3) {
+                self.Answer4Text.setTitle("\(self.Answer4Text.titleLabel!.text!) NONONO", for: .normal)
+            }
+        }
+        
+        
+        
+    }
+    
+    
     
     // MARK: - ViewDidLoad
     override func viewDidLoad() {
@@ -105,7 +177,10 @@ class GameScreenViewController: UIViewController {
         guard let qa = self.qa else {return}
         gameSessionDelegate?.setQA(qa: qa)
         
+        
         gameSessionDelegate?.setQuestionPosition(id: 0)
+        
+       
         
         
         
@@ -146,6 +221,11 @@ class GameScreenViewController: UIViewController {
    
     
     private func restartGame() {
+        
+        // активируем кнопки помощи
+        callFriend.isEnabled = true
+        auditoryHelp.isEnabled = true
+        fiftyFifty.isEnabled = true
         
         // сохраняем рекорд в Game
         let score = gameSessionDelegate?.getQuestionPosition()

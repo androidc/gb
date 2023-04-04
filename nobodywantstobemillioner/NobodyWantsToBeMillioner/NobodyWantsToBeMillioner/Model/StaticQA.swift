@@ -118,5 +118,16 @@ class StaticQA {
         return answers
     }
     
+    func getWrightAnswerIdByQuestionId(questionId: Int) -> Int {
+        
+        for answer in self.answers where answer.questionId == questionId {
+            if answer.bingo {
+                return answer.id
+            }
+        }
+        // это никогда не должно выполниться
+        return 0
+    }
+    
     
 }

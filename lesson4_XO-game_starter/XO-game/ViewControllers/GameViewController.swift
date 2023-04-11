@@ -23,33 +23,48 @@ class GameViewController: UIViewController {
  
     private let gameboard = Gameboard()
     private lazy var  referee = Referee(gameboard: gameboard)
-    private var currentState: GameState! {
+    var currentState: GameState! {
         didSet {
             currentState.begin()
         }
     }
-
+    
+   
+    
+    //MARK: - Properties
+    var gameType: GameType = .human
+   
     // MARK: - ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
+        Game.shared.gameType = gameType
+     
+
         
          goToFirstState()
-        gameboardView.onSelectPosition = { [weak self] position in
-            guard let self = self else { return }
-            
-            
-            self.currentState.addMark(at: position)
-            if self.currentState.isCompleted {
-                 self.goToNextState()
-            }
-            //self.gameboardView.placeMarkView(XView(), at: position)
+        // если ходит компьютер, то позиция выбирается по ИИ (можно реализовать на стратегии). пока реализуем одну стратегию - рандомный выбор незанятой клетки
+   
+            gameboardView.onSelectPosition = { [weak self] position in
+                guard let self = self else { return }
+                
+                
+                self.currentState.addMark(at: position)
+                if self.currentState.isCompleted {
+                     self.goToNextState()
+                }
         }
+        
+       
+            //self.gameboardView.placeMarkView(XView(), at: position)
+        
     }
     // MARK: - actions
     @IBAction func restartButtonTapped(_ sender: UIButton) {
+        gameboardView.clear()
+        gameboard.clear()
         log(.restartGame)
+        goToFirstState()
     }
     
     // MARK: - Private Functions
@@ -63,7 +78,7 @@ class GameViewController: UIViewController {
                                         gameBoardView: gameboardView)
     }
     
-    private func goToNextState() {
+     func goToNextState() {
         
         if let winner = referee.determineWinner() {
             currentState = GameEndedState(winner: winner, gameViewController: self)

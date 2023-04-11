@@ -33,6 +33,26 @@ class PlayerInputState: GameState {
         case .second:
             gameViewController?.firstPlayerTurnLabel.isHidden = true
             gameViewController?.secondPlayerTurnLabel.isHidden = false
+        case .computer:
+            gameViewController?.firstPlayerTurnLabel.isHidden = true
+            gameViewController?.secondPlayerTurnLabel.isHidden = false
+            
+            // здесь делаем ход
+            // получаем position от компьютера
+            let computerStrategy: ComputerStrategy = RandomComputerStrategy(gameBoardView: gameBoardView!)
+            
+            guard let position: GameboardPosition = computerStrategy.selectPosition() else {
+             
+                gameViewController!.currentState = GameEndedState(winner: nil, gameViewController: gameViewController!)
+                return
+            }
+            print(position)
+            gameViewController!.currentState.addMark(at: position)
+            
+            if isCompleted {
+                gameViewController!.goToNextState()
+            }
+            //gameViewController?.winnerLabel.isHidden = true
         }
         gameViewController?.winnerLabel.isHidden = true
     }
@@ -42,13 +62,14 @@ class PlayerInputState: GameState {
             return
         }
         log(.playerInput(player: player, position: position))
-        let markView: MarkView
-        switch player {
-        case .first:
-            markView = XView()
-        case .second:
-            markView = OView()
-        }
+       
+//        let markView: MarkView
+//        switch player {
+//        case .first:
+//            markView = XView()
+//        case .second, .computer:
+//            markView = OView()
+//        }
         
         gameBoard?.setPlayer(player, at: position)
         gameBoardView.placeMarkView(markViewPrototype.copy(), at: position)

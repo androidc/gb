@@ -7,7 +7,7 @@ class LogerInvoker {
     
     // MARK: - Private Properties
     private let logger = LogReceiver()
-    private let batchSize = 5
+    private let batchSize = 1
     
     private var commands: [LogCommand] = []
     

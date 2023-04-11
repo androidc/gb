@@ -36,6 +36,8 @@ class GameEndedState: GameState {
             return "1st player"
         case .second:
             return "2st player"
+        case .computer:
+            return "computer"
         }
     }
 }

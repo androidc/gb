@@ -11,18 +11,22 @@ import Foundation
 public enum Player: CaseIterable {
     case first
     case second
+    case computer
     
     var next: Player {
         switch self {
-        case .first: return .second
-        case .second: return .first
+        case .first:
+            if Game.shared.gameType == .human {return .second} else {return .computer}
+        case .second,.computer:
+            return .first
+        
         }
     }
     
     var markViewPrototype: MarkView {
         switch self {
         case .first: return XView()
-        case .second: return OView()
+        case .second, .computer: return OView()
         }
     }
 }

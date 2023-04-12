@@ -20,6 +20,9 @@ class MainViewController: UIViewController {
         case "humanSegue":
             guard let destinationVC = segue.destination as? GameViewController else {return}
             destinationVC.gameType = .human
+        case "human5Segue":
+            guard let destinationVC = segue.destination as? GameViewController else {return}
+            destinationVC.gameType = .humanFive
         default:
             break
         }

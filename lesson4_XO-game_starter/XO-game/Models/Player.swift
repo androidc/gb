@@ -16,7 +16,7 @@ public enum Player: CaseIterable {
     var next: Player {
         switch self {
         case .first:
-            if Game.shared.gameType == .human {return .second} else {return .computer}
+            if (Game.shared.gameType == .human || Game.shared.gameType == .humanFive) {return .second} else {return .computer}
         case .second,.computer:
             return .first
         

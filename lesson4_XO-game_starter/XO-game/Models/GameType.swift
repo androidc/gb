@@ -3,5 +3,5 @@
 import Foundation
 
 enum GameType {
-    case computer,human
+    case computer,human,humanFive
 }

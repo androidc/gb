@@ -18,7 +18,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="17" translatesAutoresizingMaskIntoConstraints="NO" id="Z2b-ia-jAU">
-                                <rect key="frame" x="90.5" y="294" width="194.5" height="79"/>
+                                <rect key="frame" x="90.5" y="270" width="194.5" height="127"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wCk-1g-UvX">
                                         <rect key="frame" x="0.0" y="0.0" width="194.5" height="31"/>
@@ -34,6 +34,14 @@
                                         <buttonConfiguration key="configuration" style="filled" title="Игра с двумя игроками"/>
                                         <connections>
                                             <segue destination="BYZ-38-t0r" kind="presentation" identifier="humanSegue" modalPresentationStyle="fullScreen" id="0VU-v2-eZe"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pZS-Bx-9aB">
+                                        <rect key="frame" x="0.0" y="96" width="194.5" height="31"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="filled" title="Игра &quot;5 на 5&quot;"/>
+                                        <connections>
+                                            <segue destination="BYZ-38-t0r" kind="presentation" identifier="human5Segue" modalPresentationStyle="fullScreen" id="lMY-VQ-OVF"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -137,7 +145,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="0VU-v2-eZe"/>
+        <segue reference="lMY-VQ-OVF"/>
     </inferredMetricsTieBreakers>
     <resources>
         <systemColor name="systemBackgroundColor">

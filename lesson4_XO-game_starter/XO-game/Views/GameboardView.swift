@@ -53,6 +53,14 @@ public class GameboardView: UIView {
         addSubview(markView)
     }
     
+    public func placeMarkViewWithoutCheck(_ markView: MarkView, at position: GameboardPosition) {
+        removeMarkView(at: position)
+        updateFrame(for: markView, at: position)
+        markViewForPosition[position] = markView
+      
+        addSubview(markView)
+    }
+    
     public func removeMarkView(at position: GameboardPosition) {
         guard let markView = markViewForPosition[position] else {
             return

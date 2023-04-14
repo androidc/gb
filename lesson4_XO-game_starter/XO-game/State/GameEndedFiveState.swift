@@ -31,16 +31,28 @@ class GameEndedFiveState: GameState {
         guard let gameBoardView = gameBoardView else {
             return
         }
+        // делаем ходы игроков
+        PlayerActionInvoker.shared.executeCommands()
         // показать по очереди ходы игроков
         for i in 0...4 {
-         //  показать ход первого игрока
-            gameBoardView.placeMarkViewWithoutCheck(first.markViewPrototype.copy(), at: Game.shared.firstPositions[i])
-            gameBoard!.setPlayer(first, at: Game.shared.firstPositions[i])
+         
+            // добавляем команды в PlayerActionInvoker
+            PlayerActionInvoker.shared.addCommand(DrawMark(gameBoardView: gameBoardView, player: first, position: Game.shared.firstPositions[i], gameBoard: gameBoard!))
+            PlayerActionInvoker.shared.addCommand(DrawMark(gameBoardView: gameBoardView, player: second, position: Game.shared.secondPositions[i], gameBoard: gameBoard!))
             
-            gameBoardView.placeMarkViewWithoutCheck(second.markViewPrototype.copy(), at: Game.shared.secondPositions[i])
-            gameBoard!.setPlayer(second, at: Game.shared.secondPositions[i])
+//            //  показать ход первого игрока
+//            gameBoardView.placeMarkViewWithoutCheck(first.markViewPrototype.copy(), at: Game.shared.firstPositions[i])
+//            gameBoard!.setPlayer(first, at: Game.shared.firstPositions[i])
+//
+//            gameBoardView.placeMarkViewWithoutCheck(second.markViewPrototype.copy(), at: Game.shared.secondPositions[i])
+//            gameBoard!.setPlayer(second, at: Game.shared.secondPositions[i])
           
         }
+        // отображаем ходы на доске
+        PlayerActionInvoker.shared.executeCommands()
+        // выполняем все команды из PlayerActionInvoker
+        
+       
         
         // вывести имя победителя
         let winner = referee!.determineWinner()

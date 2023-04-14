@@ -42,17 +42,26 @@ class Player5InputState: GameState {
     }
     
     func addMark(at position: GameboardPosition) {
+        
+        // это будет выполняться в команде AddMark
         // без всяких проверок мы ставим игрока в выбранную позицию
-        gameBoard?.setPlayer(player, at: position)
-        // сохраняем ход в positions текущего игрока
-        switch player {
-        case .first:
-            Game.shared.firstPositions.append(position)
-        case .second:
-            Game.shared.secondPositions.append(position)
-        case .computer:
-            break
+        //gameBoard?.setPlayer(player, at: position)
+           
+//        // сохраняем ход в positions текущего игрока
+       
+//        switch player {
+//        case .first:
+//            Game.shared.firstPositions.append(position)
+//        case .second:
+//            Game.shared.secondPositions.append(position)
+//        case .computer:
+//            break
+//        }
+        guard let gameBoard = gameBoard else {
+            return
         }
+        
+        PlayerActionInvoker.shared.addCommand(AddMark(position: position, gameBoard: gameBoard, player: player))
         markCount += 1
         // когда игрок поставит 5 отметок, то возвращаем isCompleted = true
         if markCount == 5 {

@@ -5,6 +5,7 @@ import UIKit
 class ViewController: UIViewController {
     let testModel:TestModel = TestModel()
     var selectedIndexPath: Int = 0
+
     
     
     
@@ -101,9 +102,12 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
          return cell
     }
     
-    
+    // нажатие на ячейку в таблице
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         //print("pressed on \(CurrentLevel.shared.currentTasks[indexPath.row].name)")
+        // сохраним имя таски для передачи в NavBar в случае если дошли до листа
+        let name = CurrentLevel.shared.currentTasks[indexPath.row].name
+        //
         CurrentLevel.shared.currentTasks = CurrentLevel.shared.currentTasks[indexPath.row].tasks
         CurrentLevel.shared.push(CurrentLevel.shared.currentTasks)
         // это нужно, чтобы при нажатии на кнопку Back обновить таски у задачи, в которую мы добавляли subtask
@@ -114,8 +118,11 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         
         if CurrentLevel.shared.currentTasks.count > 0 , let parent = CurrentLevel.shared.currentTasks[0].parent {
             self.navBar.topItem?.title = parent
+        } else {
+            self.navBar.topItem?.title = name
         }
         
+        CurrentLevel.shared.selectedIndexPath = indexPath.row
         
         
         tableView.reloadData()

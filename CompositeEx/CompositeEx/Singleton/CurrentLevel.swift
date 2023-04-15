@@ -9,6 +9,8 @@ class CurrentLevel {
     var currentTasks:[Tasks] = []
     var currentTasksInStack:[[Tasks]] = []
     
+    var selectedIndexPath: Int = 0
+    
     func description() {
         currentTasks.forEach { task in
             print(task.name)

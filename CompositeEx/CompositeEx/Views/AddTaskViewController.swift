@@ -28,18 +28,21 @@ class AddTaskViewController: UIViewController {
         }
         
         if CurrentLevel.shared.level == 0 {
-            let newTask = Tasks(subTask.text!, nil)
-            CurrentLevel.shared.currentTasks.append(newTask)
-            print(CurrentLevel.shared.currentTasks.description)
-            CurrentLevel.shared.pop()
-            CurrentLevel.shared.push(CurrentLevel.shared.currentTasks)
-            print(CurrentLevel.shared.currentTasks.description)
+            
+             addTaskToCurrentLevel(subTask.text!,nil)
+//            let newTask = Tasks(subTask.text!, nil)
+//            CurrentLevel.shared.currentTasks.append(newTask)
+//            print(CurrentLevel.shared.currentTasks.description)
+//            CurrentLevel.shared.pop()
+//            CurrentLevel.shared.push(CurrentLevel.shared.currentTasks)
+//            print(CurrentLevel.shared.currentTasks.description)
         } else {
-            let newTask = Tasks(subTask.text!, parentTask.text!)
-            CurrentLevel.shared.currentTasks.append(newTask)
-            CurrentLevel.shared.pop()
-            CurrentLevel.shared.push(CurrentLevel.shared.currentTasks)
-            print(CurrentLevel.shared.currentTasks.description)
+           addTaskToCurrentLevel(subTask.text!,parentTask.text!)
+//            let newTask = Tasks(subTask.text!, parentTask.text!)
+//            CurrentLevel.shared.currentTasks.append(newTask)
+//            CurrentLevel.shared.pop()
+//            CurrentLevel.shared.push(CurrentLevel.shared.currentTasks)
+//            print(CurrentLevel.shared.currentTasks.description)
         }
         
        
@@ -53,11 +56,37 @@ class AddTaskViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        if CurrentLevel.shared.currentTasks.count > 0 ,let parent = CurrentLevel.shared.currentTasks[0].parent {
+            parentTask.text = parent
+        } else {
+            CurrentLevel.shared.description()
+            if CurrentLevel.shared.currentTasksInStack.count == 1 {
+                parentTask.text = "Root"
+            } else {
+                
+                parentTask.text = CurrentLevel.shared.currentTasksInStack[1][CurrentLevel.shared.selectedIndexPath].name
+            }
+            
+         //   parentTask.text = CurrentLevel.shared.currentTasks[0].name
+            
+        }
+        
+     
         
 
    
     }
     
+    // MARK: - Private Func
+    
+    
+    private func addTaskToCurrentLevel(_ subTask: String,_ parent: String?) {
+        let newTask = Tasks(subTask, parent)
+        CurrentLevel.shared.currentTasks.append(newTask)
+        // обновляем таску в стеке
+        CurrentLevel.shared.pop()
+        CurrentLevel.shared.push(CurrentLevel.shared.currentTasks)
+    }
 
 
 }

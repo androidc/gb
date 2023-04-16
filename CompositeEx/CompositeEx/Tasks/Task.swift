@@ -2,7 +2,7 @@
 
 // v.1.0 - lesson5hw
 
-import Foundation
+ import Foundation
 
 protocol Task {
     var name: String {get}

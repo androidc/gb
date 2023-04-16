@@ -1,5 +1,7 @@
 import UIKit
 
+// v.1.0 - lesson5hw
+
 // определим структуры json
 struct Person: Decodable {
     let name: String

@@ -23,10 +23,13 @@ class ViewController: UIViewController {
         // вопрос как это сделать :)
         // это было бы не проблемой если бы мы использовали разные экраны :)
         
+        // для отладки
         CurrentLevel.shared.description()
+        
         let popVal =   CurrentLevel.shared.pop()
         
         guard let peek = CurrentLevel.shared.peek() else {
+            // значит выбросили корень
             self.backButton.isEnabled = false
             // вернуть в стек вытащенный массив
             CurrentLevel.shared.push(popVal)
@@ -38,7 +41,8 @@ class ViewController: UIViewController {
         CurrentLevel.shared.currentTasks = peek
         // нужно обновить в currentTasks таски у добавленной задачи
         CurrentLevel.shared.currentTasks[selectedIndexPath].tasks = popVal
-        // увеличиваем уровень перехода
+        
+        // уменьшаем уровень перехода
         CurrentLevel.shared.level -= 1
         tableView.reloadData()
         if let parent = CurrentLevel.shared.currentTasks[0].parent {

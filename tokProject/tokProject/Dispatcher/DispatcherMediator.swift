@@ -8,9 +8,11 @@ protocol Mediator: AnyObject {
 }
 
 class DispatcherMediator: Mediator {
+    
     var strategy: MediatorStrategy
     var cluster: ClusterNodes
     var currentNode: Int = 0
+    let queue = DispatchQueue.global(qos: .utility)
    
     
  
@@ -21,16 +23,23 @@ class DispatcherMediator: Mediator {
     
     
     
-    func sendRequest() {
+    func sendRequest()  {
         // передать сообщение в одну из нод, выбор ноды по стратегии.
-        print("mediator send request")
+       // print("mediator send request")
         switch strategy {
         case .consistent:
             print("send request using consistent strategy")
-            let nodesCount = cluster.nodes.count
-            if (currentNode >= nodesCount) { currentNode = 0 }
-            print(cluster.performRequestOnNode(index: currentNode))
-            currentNode+=1
+           
+            queue.async {
+                let nodesCount = self.cluster.nodes.count
+                if (self.currentNode >= nodesCount) { self.currentNode = 0 }
+                let id = UUID().uuidString
+                print(self.cluster.performRequestOnNode(index: self.currentNode, id: id)) // error here
+                    self.currentNode+=1
+            }
+          
+            
+            
         case .random:
             print("send request using random strategy")
         case .byDisp:

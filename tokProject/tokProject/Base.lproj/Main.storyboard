@@ -16,19 +16,103 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pbg-24-SSF">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pbg-24-SSF">
                                 <rect key="frame" x="74" y="44" width="292" height="31"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="tinted" title="Send Request"/>
                                 <connections>
                                     <action selector="sendAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="lkR-Rl-6Qx"/>
                                 </connections>
                             </button>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="eNw-uA-Ptl">
+                                <rect key="frame" x="37" y="105" width="357" height="566"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" textLabel="Yss-Pt-9Y7" detailTextLabel="not-5N-YOn" style="IBUITableViewCellStyleValue1" id="jiq-8i-MUq">
+                                        <rect key="frame" x="0.0" y="44.5" width="357" height="43.5"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="jiq-8i-MUq" id="GPD-hX-4jv">
+                                            <rect key="frame" x="0.0" y="0.0" width="357" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Yss-Pt-9Y7">
+                                                    <rect key="frame" x="20" y="15" width="25" height="14.5"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="0.0"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Detail" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="not-5N-YOn">
+                                                    <rect key="frame" x="304" y="15" width="33" height="14.5"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="0.0"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Токен API:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EDW-MK-Ypo">
+                                <rect key="frame" x="37" y="704" width="357" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Токен в БД:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OCJ-SW-qEp">
+                                <rect key="frame" x="37" y="733" width="357" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8cm-9N-i80">
+                                <rect key="frame" x="37" y="798" width="157" height="31"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title="Lock/Unlock"/>
+                                <connections>
+                                    <action selector="lockUnlockAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="hl0-na-CSS"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="n4u-vh-PHd">
+                                <rect key="frame" x="243" y="798" width="137" height="31"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title="Change Token"/>
+                                <connections>
+                                    <action selector="changeTokenAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="M7m-aY-Gw4"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="EDW-MK-Ypo" firstAttribute="top" secondItem="eNw-uA-Ptl" secondAttribute="bottom" constant="33" id="1p5-GA-gVh"/>
+                            <constraint firstItem="n4u-vh-PHd" firstAttribute="leading" secondItem="8cm-9N-i80" secondAttribute="trailing" constant="49" id="3fH-YS-7FT"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="EDW-MK-Ypo" secondAttribute="trailing" constant="20" id="5Zl-GO-HXC"/>
+                            <constraint firstItem="Pbg-24-SSF" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="5lc-Tz-Qo3"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="eNw-uA-Ptl" secondAttribute="trailing" constant="20" id="Deu-En-JyJ"/>
+                            <constraint firstItem="n4u-vh-PHd" firstAttribute="leading" secondItem="OCJ-SW-qEp" secondAttribute="trailing" constant="-151" id="E1t-D9-hFf"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="eNw-uA-Ptl" secondAttribute="bottom" constant="191" id="ErV-By-lUu"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="8cm-9N-i80" secondAttribute="bottom" constant="33" id="FpA-cM-3wu"/>
+                            <constraint firstItem="OCJ-SW-qEp" firstAttribute="top" secondItem="EDW-MK-Ypo" secondAttribute="bottom" constant="8" symbolic="YES" id="Gbg-9p-iWG"/>
+                            <constraint firstItem="eNw-uA-Ptl" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="37" id="HeF-n6-kSq"/>
+                            <constraint firstItem="eNw-uA-Ptl" firstAttribute="top" secondItem="Pbg-24-SSF" secondAttribute="bottom" constant="30" id="Kpn-zB-lcZ"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="OCJ-SW-qEp" secondAttribute="trailing" constant="20" id="OcZ-NM-yIx"/>
+                            <constraint firstItem="8cm-9N-i80" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="37" id="Vcz-0A-slt"/>
+                            <constraint firstItem="EDW-MK-Ypo" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="37" id="Z6a-s0-nNp"/>
+                            <constraint firstItem="Pbg-24-SSF" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="74" id="gcC-LU-OCA"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Pbg-24-SSF" secondAttribute="trailing" constant="48" id="ifK-l8-awA"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="n4u-vh-PHd" secondAttribute="bottom" constant="33" id="kq9-22-HFt"/>
+                            <constraint firstItem="OCJ-SW-qEp" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="37" id="ss2-oa-QJF"/>
+                            <constraint firstItem="8cm-9N-i80" firstAttribute="top" secondItem="OCJ-SW-qEp" secondAttribute="bottom" constant="44" id="uUe-87-J1V"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="n4u-vh-PHd" secondAttribute="trailing" constant="34" id="wwJ-Ag-bWX"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="tableView" destination="eNw-uA-Ptl" id="Cxu-C2-9xs"/>
+                        <outlet property="tokenApi" destination="EDW-MK-Ypo" id="aif-VE-Fti"/>
+                        <outlet property="tokenDB" destination="OCJ-SW-qEp" id="psU-Bz-ROV"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>

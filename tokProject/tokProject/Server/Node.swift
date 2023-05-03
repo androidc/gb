@@ -2,10 +2,25 @@
 
 import Foundation
 
+enum WorkerStatus {
+    case running
+    case finished
+}
+
+class Worker {
+    var id: String
+    var workerStatus: WorkerStatus
+    
+    init(id: String, workerStatus: WorkerStatus) {
+        self.id = id
+        self.workerStatus = workerStatus
+    }
+}
+
 class Node {
     private var mail: String
     private var password: String
-    private var service: Service = Service()
+    var workers: [Worker] = []
     
     
     init(mail: String, password: String) {
@@ -15,8 +30,14 @@ class Node {
     
     
     
-    private func getTokenAndCallApi() throws -> String {
-        // блокируем БД
+    private func delay(_ delay:Double, closure:@escaping ()->()) {
+        DispatchQueue.main.asyncAfter(
+            deadline: DispatchTime.now() + Double(Int64(delay * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: closure)
+    }
+    
+    private func getTokenAndCallApi(id: String, worker: Worker, on service: Service)  throws -> String {
+        
+       
         print("blocking db")
         TokenShare.shared.isLocked = true
         //делаем запрос авторизации
@@ -24,6 +45,12 @@ class Node {
         if service_token == "" {
             // разблокируем БД
             TokenShare.shared.isLocked = false
+           
+            
+            // завершаем worker
+            worker.workerStatus = .finished
+            //удаляем worker из массива workers
+            workers.removeAll (where: {$0.id == id})
             // throw exception
             throw tokenError.wrongMailPass
         }
@@ -31,24 +58,49 @@ class Node {
         // разблокируем БД
         print("unblocking db")
         TokenShare.shared.isLocked = false
-        return service.callApi(token: service_token)
+        let response =  service.callApi(token: service_token, id: id)
+        // завершаем worker
+        worker.workerStatus = .finished
+        //удаляем worker из массива workers
+        workers.removeAll (where: {$0.id == id})
+        return response
     }
-    
-    func performRequest() throws -> String?  {
-        var token: String?
+
+
+    func performRequest(id: String, on service: Service)  throws -> String?  {
+        
+        // добавляем worker .running
+        let worker = Worker(id: id, workerStatus: .running)
+        workers.append(worker)
+        // блокируем БД
+        
+        //var token: String?
         var count = 0
         
         // getToken from tokenShare
         print("getToken from tokenShare")
-        Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
-            if !TokenShare.shared.isLocked || count >= 15 {
-                token = TokenShare.shared.token
-                timer.invalidate()
-            }
+  
+        while (TokenShare.shared.isLocked && count < 15) {
             count += 1
+            delay(1) {print("db is locked now")}
         }
         
+//        let timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
+//            if !TokenShare.shared.isLocked || count >= 15 {
+//                //token = TokenShare.shared.token
+//                timer.invalidate()
+//            }
+//            count += 1
+//        }
+//
+       
+        
         guard count < 15 else {
+            // завершаем worker
+            worker.workerStatus = .finished
+            //удаляем worker из массива workers
+            workers.removeAll (where: {$0.id == id})
+            
             throw tokenError.longBlocking
         }
         
@@ -58,29 +110,49 @@ class Node {
         guard let token = TokenShare.shared.token else {
             // если нет токена, то
             print("no token in TokenShare, request it")
-            let data = try getTokenAndCallApi()
+            print("request new token and call api with id: \(id)")
+            let data = try  getTokenAndCallApi(id: id, worker: worker, on: service)
+          
             return data
         }
             
         // если есть токен, то
         // запрос api с этим токеном
-        let data = service.callApi(token: token)
+        print("call api with id: \(id)")
+        let data =  service.callApi(token: token, id: id)
         if data != "token error" {
+            
+            
+            // завершаем worker // здесь вылетает ошибка!
+            worker.workerStatus = .finished
+            //удаляем worker из массива workers
+           workers.removeAll (where: {$0.id == id})
+            
+            
             return data
         } else {
             // проверяем что бд не блокирована
             count = 0
             var token2: String?
             print("check if db is blocked")
-            Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
-                if !TokenShare.shared.isLocked || count >= 15 {
-                    token2 = TokenShare.shared.token
-                    timer.invalidate()
-                }
+            while (TokenShare.shared.isLocked && count < 15) {
+                token2 = TokenShare.shared.token
                 count += 1
+                delay(1) {print("db is locked now")}
             }
+//            let timer =  Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
+//                if !TokenShare.shared.isLocked || count >= 15 {
+//                    token2 = TokenShare.shared.token
+//                    timer.invalidate()
+//                }
+//                count += 1
+//            }
             
             guard count < 15 else {
+                // завершаем worker
+                worker.workerStatus = .finished
+                //удаляем worker из массива workers
+                workers.removeAll (where: {$0.id == id})
                 throw tokenError.longBlocking
             }
             
@@ -89,13 +161,24 @@ class Node {
                 // делаем запрос с новым токеном
                 // если токен не появился, то это какой-то косяк
                 guard let tokenNew = token2 else {
+                    // завершаем worker
+                    worker.workerStatus = .finished
+                    //удаляем worker из массива workers
+                    workers.removeAll (where: {$0.id == id})
                     throw tokenError.noToken
                 }
-                return service.callApi(token: tokenNew)
+                print("call api with id: \(id)")
+                // завершаем worker
+                worker.workerStatus = .finished
+                //удаляем worker из массива workers
+                workers.removeAll (where: {$0.id == id})
+                return  service.callApi(token: tokenNew, id: id)
              
             } else {
                 // бд не была блокирована
-                let data = try getTokenAndCallApi()
+                print("request new token and call api with id: \(id)")
+                let data = try  getTokenAndCallApi(id: id, worker: worker, on: service)
+               
                 return data
             }
       

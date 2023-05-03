@@ -4,6 +4,7 @@ import Foundation
 
 class ClusterNodes {
     var nodes: [Node] = []
+    var service: Service = Service ()
 //    let mail: String = "123"
 //    let pass: String = "123"
     let mail: String = "admin"
@@ -18,9 +19,9 @@ class ClusterNodes {
         nodes.remove(at: index)
     }
     
-    func performRequestOnNode(index: Int) -> String? {
+    func performRequestOnNode(index: Int, id: String)  -> String? {
         do  {
-            let result = try nodes[index].performRequest()
+            let result = try  nodes[index].performRequest(id: id, on: service)
             return result
         } catch tokenError.noToken {
             print("no Token")

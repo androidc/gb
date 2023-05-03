@@ -12,9 +12,9 @@ class Client {
         self.mediator = mediator
     }
     
-    func sendRequest() {
+    func sendRequest()  {
         print("call mediator")
-        self.mediator?.sendRequest()
+         self.mediator?.sendRequest()
         
     }
     

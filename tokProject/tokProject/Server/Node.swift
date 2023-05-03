@@ -21,7 +21,7 @@ class Node {
     private var mail: String
     private var password: String
     var workers: [Worker] = []
-    
+    var lock = NSLock()
     
     init(mail: String, password: String) {
         self.mail = mail
@@ -34,6 +34,8 @@ class Node {
         DispatchQueue.main.asyncAfter(
             deadline: DispatchTime.now() + Double(Int64(delay * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: closure)
     }
+    
+    
     
     private func getTokenAndCallApi(id: String, worker: Worker, on service: Service)  throws -> String {
         
@@ -48,9 +50,10 @@ class Node {
            
             
             // завершаем worker
-            worker.workerStatus = .finished
+            workers.filter {$0.id == id }.first?.workerStatus = .finished
+          //  worker.workerStatus = .finished
             //удаляем worker из массива workers
-            workers.removeAll (where: {$0.id == id})
+           // workers.removeAll (where: {$0.id == id})
             // throw exception
             throw tokenError.wrongMailPass
         }
@@ -60,9 +63,10 @@ class Node {
         TokenShare.shared.isLocked = false
         let response =  service.callApi(token: service_token, id: id)
         // завершаем worker
-        worker.workerStatus = .finished
+        workers.filter {$0.id == id }.first?.workerStatus = .finished
+       // worker.workerStatus = .finished
         //удаляем worker из массива workers
-        workers.removeAll (where: {$0.id == id})
+      //  workers.removeAll (where: {$0.id == id})
         return response
     }
 
@@ -71,7 +75,7 @@ class Node {
         
         // добавляем worker .running
         let worker = Worker(id: id, workerStatus: .running)
-        workers.append(worker)
+        lock.with { workers.append(worker)}
         // блокируем БД
         
         //var token: String?
@@ -97,9 +101,10 @@ class Node {
         
         guard count < 15 else {
             // завершаем worker
-            worker.workerStatus = .finished
+            workers.filter {$0.id == id }.first?.workerStatus = .finished
+            //worker.workerStatus = .finished
             //удаляем worker из массива workers
-            workers.removeAll (where: {$0.id == id})
+            //workers.removeAll (where: {$0.id == id})
             
             throw tokenError.longBlocking
         }
@@ -122,11 +127,11 @@ class Node {
         let data =  service.callApi(token: token, id: id)
         if data != "token error" {
             
-            
+            workers.filter {$0.id == id }.first?.workerStatus = .finished
             // завершаем worker // здесь вылетает ошибка!
-            worker.workerStatus = .finished
+           // worker.workerStatus = .finished
             //удаляем worker из массива workers
-           workers.removeAll (where: {$0.id == id})
+          // workers.removeAll (where: {$0.id == id})
             
             
             return data
@@ -150,9 +155,10 @@ class Node {
             
             guard count < 15 else {
                 // завершаем worker
-                worker.workerStatus = .finished
+                workers.filter {$0.id == id }.first?.workerStatus = .finished
+                //worker.workerStatus = .finished
                 //удаляем worker из массива workers
-                workers.removeAll (where: {$0.id == id})
+                //workers.removeAll (where: {$0.id == id})
                 throw tokenError.longBlocking
             }
             
@@ -162,16 +168,18 @@ class Node {
                 // если токен не появился, то это какой-то косяк
                 guard let tokenNew = token2 else {
                     // завершаем worker
-                    worker.workerStatus = .finished
+                    workers.filter {$0.id == id }.first?.workerStatus = .finished
+                   // worker.workerStatus = .finished
                     //удаляем worker из массива workers
-                    workers.removeAll (where: {$0.id == id})
+                    //workers.removeAll (where: {$0.id == id})
                     throw tokenError.noToken
                 }
                 print("call api with id: \(id)")
                 // завершаем worker
-                worker.workerStatus = .finished
+                workers.filter {$0.id == id }.first?.workerStatus = .finished
+               // worker.workerStatus = .finished
                 //удаляем worker из массива workers
-                workers.removeAll (where: {$0.id == id})
+               // workers.removeAll (where: {$0.id == id})
                 return  service.callApi(token: tokenNew, id: id)
              
             } else {
@@ -191,4 +199,14 @@ class Node {
     }
     
     
+}
+
+extension NSLock {
+
+    @discardableResult
+    func with<T>(_ block: () throws -> T) rethrows -> T {
+        lock()
+        defer { unlock() }
+        return try block()
+    }
 }

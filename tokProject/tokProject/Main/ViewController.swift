@@ -60,7 +60,9 @@ class ViewController: UIViewController {
         let mediator = DispatcherMediator(strategy: .consistent, claster: cluster)
         client = Client(mediator: mediator)
        
-        Timer.scheduledTimer(withTimeInterval: 0.2, repeats: true) { timer in
+        // при интервали 0.05 перестает обновляться экран
+        // до второго таймера не доходит даже
+        Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { timer in
             self.client?.sendRequest()
         }
         
@@ -94,7 +96,15 @@ class ViewController: UIViewController {
             for (index,node) in self.cluster.nodes.enumerated() {
                // self.nodesWorkers.append(node.workers.filter{ $0.workerStatus == .running}.count)
                 self.nodesWorkers[index] = node.workers.filter{ $0.workerStatus == .running}.count
+                // удаляем worker .finished
+                if node.workers.contains(where: { $0.workerStatus == .finished
+                }) {
+                    node.lock.with{node.workers.removeAll {$0.workerStatus == .finished }}
+                }
+                
             }
+            
+            
 //            // получаем текущий токен в API
 //            let apiToken = cluster.service.token
             

@@ -14,6 +14,7 @@ class DispatcherMediator: Mediator {
     var currentNode: Int = 0
     let queue = DispatchQueue.global(qos: .utility)
    
+   
     
  
     init(strategy: MediatorStrategy, claster: ClusterNodes) {
@@ -34,8 +35,9 @@ class DispatcherMediator: Mediator {
                 let nodesCount = self.cluster.nodes.count
                 if (self.currentNode >= nodesCount) { self.currentNode = 0 }
                 let id = UUID().uuidString
-                print(self.cluster.performRequestOnNode(index: self.currentNode, id: id)) // error here
-                    self.currentNode+=1
+                print(self.cluster.performRequestOnNode(index: self.currentNode, id: id))
+                // эта строчка выполняется после того, как выполнится предыдущая, то есть пройдет один из запросов, поэтому наполняется сначала первая нода
+                self.currentNode+=1
             }
           
             
@@ -48,3 +50,5 @@ class DispatcherMediator: Mediator {
         
     }
 }
+
+

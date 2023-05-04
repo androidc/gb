@@ -36,7 +36,6 @@ class Service {
            let delayValue:Double = Double((1...9).randomElement()!)
             let duration = UInt32(delayValue)
             sleep(duration)
-//            try await Task.sleep(duration)
             print("call api success. id: \(id)")
             return "data returned with delay: \(delayValue)"
         } else {return "token error"}

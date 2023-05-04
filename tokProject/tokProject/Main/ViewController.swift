@@ -59,14 +59,8 @@ class ViewController: UIViewController {
         // инициализируем медиатор c последовательной отправкой сообщений в ноды
         let mediator = DispatcherMediator(strategy: .consistent, claster: cluster)
         client = Client(mediator: mediator)
-       
-        // при интервали 0.05 перестает обновляться экран
-        // до второго таймера не доходит даже
-        Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { timer in
-            self.client?.sendRequest()
-        }
         
-            Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
+        Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { timer in
               // асинхронно спрашиваем сервисы и возвращаем completion
                 self.monitor { nodesWorkers in
                     for (index, worker) in nodesWorkers.enumerated() {
@@ -79,6 +73,14 @@ class ViewController: UIViewController {
                     self.tableView.reloadData()
                 }
             }
+       
+        // при интервали 0.05 перестает обновляться экран
+        // до второго таймера не доходит даже
+        Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { timer in
+            self.client?.sendRequest()
+        }
+        
+      
         
         
         
@@ -103,10 +105,6 @@ class ViewController: UIViewController {
                 }
                 
             }
-            
-            
-//            // получаем текущий токен в API
-//            let apiToken = cluster.service.token
             
             group.leave()
         }

@@ -21,6 +21,9 @@ class ClusterNodes {
     
     func performRequestOnNode(index: Int, id: String)  -> String? {
         do  {
+            
+//            let result = try  nodes[index].performRequest(id: id, on: service)
+//                return result
             if index < nodes.count
             { let result = try  nodes[index].performRequest(id: id, on: service)
                 return result}

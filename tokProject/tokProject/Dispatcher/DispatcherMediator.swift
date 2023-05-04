@@ -22,7 +22,7 @@ class DispatcherMediator: Mediator {
         self.cluster = claster
     }
     
-    
+    // some changes
     
     func sendRequest()  {
         // передать сообщение в одну из нод, выбор ноды по стратегии.

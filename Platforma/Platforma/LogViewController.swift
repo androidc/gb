@@ -4,6 +4,7 @@ import UIKit
 
 class LogViewController: UIViewController {
     var victim:Victim?
+    var logCount: Int = 60
     
     @IBOutlet weak var LName: UILabel!
     
@@ -16,7 +17,7 @@ class LogViewController: UIViewController {
         LName.text = victim?.name
         guard let logs = victim?.logs else {return}
         
-        for log in logs {
+        for log in logs.suffix(logCount) {
             TLog.text.append("\n")
             let header = "день \(log.day), этаж: \(log.floor), статус: \(log.status.showStatus()), голод: \(log.hungry ?? 0) \n"
             TLog.text.append(header)

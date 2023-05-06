@@ -20,7 +20,7 @@ class Platforma {
     
     init(victims: [Victim], floorCount: Int) {
         self.victims = victims
-        self.table = Table(currentFoodValue: victims.count)
+        self.table = Table(currentFoodValue: floorCount * 2)
         self.floorCount = floorCount
         for i in 1...floorCount {
             self.floors.append(Floor(index:i, table: self.table))
@@ -75,7 +75,8 @@ class Platforma {
                         
                         // увеличиваем всем жителям на этаже +1 к прожитым дням
                         for victim in floor.victims_on_floor {
-                            victim.dayZ += 1
+                            if victim.status != .dead {victim.dayZ += 1}
+                            
 //                            self.victims.filter{$0.id
 //                                == victim.id}.first?.dayZ += 1
                         }
@@ -91,28 +92,20 @@ class Platforma {
                     // выбираем кто первый ест
                     let eatOrder = floor.victims_on_floor.filter{$0.status == .live}.shuffled()
                     for victim in eatOrder {
-                        switch victim.status {
-                        case .dead:
-                            victim.appendLog(message: "мертв, не может есть", floor: floor.index, toPrint: false)
-                        case .live:
-                            let minusFood:Int =  self.victims.filter{$0.id == victim.id}.first?.eat(table: self.table, floor: floor) ?? 0
+                        let minusFood:Int =  self.victims.filter{$0.id == victim.id}.first?.eat(table: self.table, floor: floor) ?? 0
                             self.table.currentFoodValue -= minusFood
-                           
-                            // если на столе есть еще еда, то едим со стола, иначе едим трупы
-//                            if self.table.currentFoodValue > 0 {
-//                                let minusFood:Int =  self.victims.filter{$0.id == victim.id}.first?.eat(table: self.table) ?? 0
-//                                self.table.currentFoodValue -= minusFood
-//                            } else {
-//                                let freshDeadBody = floor.victims_on_floor.filter{$0.status == .dead && $0.deadTimePass <= 3}.first
-//                                if freshDeadBody != nil {
-//                                    self.victims.filter{$0.id == victim.id}.first?.eatDead(body:freshDeadBody!,table: self.table)
-//                                }
-                          
-                           // }
-                           
-                        case .immobilized:
-                            victim.appendLog(message: "обездвижен, не может есть", floor: floor.index, toPrint: false)
-                        }
+//                        switch victim.status {
+//                        case .dead:
+//                            victim.deadTimePass += 1
+//                            victim.appendLog(message: "мертв, не может есть", floor: floor.index, toPrint: false)
+//                        case .live:
+//                            let minusFood:Int =  self.victims.filter{$0.id == victim.id}.first?.eat(table: self.table, floor: floor) ?? 0
+//                            self.table.currentFoodValue -= minusFood
+//
+//
+//                        case .immobilized:
+//                            victim.appendLog(message: "обездвижен, не может есть", floor: floor.index, toPrint: false)
+//                        }
                         
                     }
                     
@@ -121,9 +114,9 @@ class Platforma {
                 
                 
                 self.table.currentFloor.value+=1
-                sleep(1)
+                
                 if self.table.currentFloor.value > self.floorCount {
-                   
+                    sleep(1)
                     self.table.currentFloor.value = 0
                     // все засыпают
                     for victim in self.victims {
@@ -133,7 +126,16 @@ class Platforma {
                     // на каждый n (10 по умолчанию) день происходит рокировка
                     if (self.dayCounter % self.dayToRotate == 0) && (self.dayCounter > 0) {
                        
-                        self.rotate()
+                        // без очистки
+                        self.rotate(clearDead: false)
+                        
+//                        // с очисткой от трупов
+//                        if self.dayCounter % (self.dayToRotate * 2) == 0 {
+//                            self.rotate(clearDead: true)
+//                        }else {
+//                            self.rotate(clearDead: false)
+//                        }
+                        
                     }
                     
                     
@@ -157,7 +159,7 @@ class Platforma {
     
     // MARK: - Private functions
 
-    private func rotate() {
+    private func rotate(clearDead: Bool) {
         // самый простой способ - сделать shuffle этажей и ...
         let floors_shuffled = floors.shuffled()
         
@@ -173,7 +175,43 @@ class Platforma {
             floors_new.append(floor_new)
         }
         
+        // сортировать по парам
+        var ind: Int = 0
+        
+        while ind < floors_new.count {
+            // получаем количество живых на текущем этаже
+            let liveVictims = floors_new[ind].victims_on_floor.filter{$0.status == .live || $0.status == .immobilized}
+            if liveVictims.count == 1 {
+                // запоминаем индекс этажа
+                let memoryIndex = ind
+                // доходим до этажа где есть такой же один или до конца
+                
+                ind += 1
+           
+                while ind < floors_new.count && floors_new[ind].victims_on_floor.filter{$0.status == .live || $0.status == .immobilized}.count != 1  {
+                    ind += 1
+                }
+                
+                if ind < floors_new.count {
+                    // здесь будет индекс следующего этажа с одним живым
+                    let liveVictim = floors_new[ind].victims_on_floor.first
+                    
+                    floors_new[memoryIndex].victims_on_floor.append(liveVictim!)
+                    floors_new[ind].victims_on_floor.removeAll()
+                }
+                
+                ind += 1
+                
+            } else {
+                ind += 1
+            }
+        }
+       
+       
+        
+        
         // добавим мертвых на этажи где они были
+        if !clearDead {
         for (index,floor) in floors_shuffled.enumerated() {
             // выбираем мертвых
             let deadVictims = floor.victims_on_floor.filter{$0.status == .dead}
@@ -181,7 +219,31 @@ class Platforma {
                 floors_new[floor.index-1].victims_on_floor.append(dead)
             }
         }
+        }
         
+        let names = Names()
+        // добавляем людей в комнаты, где остался один человек либо не осталось совсем
+        for (index,floor) in floors_new.enumerated() {
+            // получаем количество живых на текущем этаже
+            let liveVictims = floor.victims_on_floor.filter{$0.status == .live || $0.status == .immobilized}
+            if liveVictims.count == 1 {
+                let victim_new = Victim(name: names.names.randomElement()!)
+                floors_new[index].victims_on_floor.append(victim_new)
+                self.victims.append(victim_new)
+            }
+            
+            if liveVictims == nil || liveVictims.count == 0 {
+                let victim_new = Victim(name: names.names.randomElement()!)
+                floors_new[index].victims_on_floor.append(victim_new)
+                self.victims.append(victim_new)
+                let victim_new1 = Victim(name: names.names.randomElement()!)
+                floors_new[index].victims_on_floor.append(victim_new1)
+                self.victims.append(victim_new1)
+                
+            }
+        }
+        
+    
         floors = floors_new
        
     }

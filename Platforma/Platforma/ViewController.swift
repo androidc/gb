@@ -14,7 +14,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var LTable: UILabel!
     
     
-    var platforma: Platforma = Platforma(victims: People.generateTenVictims(), floorCount: 5)
+    var platforma: Platforma = Platforma(victims: People.generateTwentyVictims(), floorCount: 10)
     
  
     override func viewDidLoad() {
@@ -60,7 +60,7 @@ extension ViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell",for: indexPath)
        
         // let record = Game.shared.records[indexPath.row]
-         cell.textLabel?.text = section.victims_on_floor[indexPath.row].name
+        cell.textLabel?.text = "\(section.victims_on_floor[indexPath.row].name) - \(section.victims_on_floor[indexPath.row].dayZ)"
         cell.detailTextLabel?.text = "\(section.victims_on_floor[indexPath.row].status.showStatus()) , голод: \(section.victims_on_floor[indexPath.row].hungry) "
          return cell
         

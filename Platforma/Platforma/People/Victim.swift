@@ -56,15 +56,19 @@ class Victim {
          - Returns:  количество уничтоженной еды
      */
     func eat(table: Table, floor: Floor) -> Int {
+        let food = table.currentFoodValue
         // если у него голод = 20, то умирает
         if hungry>=20 {
             status = .dead
             appendLog(message: "умер от голода", floor: table.currentFloor.value, toPrint: false)
+            // если убрать здесь return , то появятся зомби
+            // и баги..
+            return 0
         }
         
       
         
-        let food = table.currentFoodValue
+      
   
         
         let wantsTo = wantsToEat()

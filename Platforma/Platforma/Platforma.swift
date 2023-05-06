@@ -95,7 +95,7 @@ class Platforma {
                         case .dead:
                             victim.appendLog(message: "мертв, не может есть", floor: floor.index, toPrint: false)
                         case .live:
-                            let minusFood:Int =  self.victims.filter{$0.id == victim.id}.first?.eat(table: self.table) ?? 0
+                            let minusFood:Int =  self.victims.filter{$0.id == victim.id}.first?.eat(table: self.table, floor: floor) ?? 0
                             self.table.currentFoodValue -= minusFood
                            
                             // если на столе есть еще еда, то едим со стола, иначе едим трупы
@@ -209,7 +209,7 @@ class Platforma {
                         let victims_on_floor_shuffled = victims_on_floor?.shuffled()
                         let looser = victims_on_floor_shuffled!.first
                         looser?.status = .dead
-                        looser?.appendLog(message: "умер от руки \(victims_on_floor_shuffled![1]) ", floor: floor?.index ?? 999, toPrint: false)
+                        looser?.appendLog(message: "умер от руки \(victims_on_floor_shuffled![1].name) ", floor: floor?.index ?? 999, toPrint: false)
                     }
                   
                     

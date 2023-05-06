@@ -55,20 +55,35 @@ class Victim {
          - Parameter table: - стол с едой
          - Returns:  количество уничтоженной еды
      */
-    func eat(table: Table) -> Int {
+    func eat(table: Table, floor: Floor) -> Int {
         // если у него голод = 20, то умирает
         if hungry>=20 {
             status = .dead
             appendLog(message: "умер от голода", floor: table.currentFloor.value, toPrint: false)
         }
+        
+      
+        
         let food = table.currentFoodValue
+  
+        
         let wantsTo = wantsToEat()
         appendLog(message: "\(name) хочет съесть \(wantsTo) порций", floor: table.currentFloor.value,toPrint: false)
         if food == 0 {
             // логируем, что еды нет
             appendLog(message: "еды нет. \(name) голодает",floor: table.currentFloor.value,toPrint: false)
-            // увеличиваем голод на 1
-            hungry += 1
+            // ищем свежий труп
+            let freshDeadBody = floor.victims_on_floor.filter{$0.status == .dead && $0.deadTimePass <= 3}.first
+            if freshDeadBody != nil {
+                // логируем, что нашли труп
+                appendLog(message: "едим товарища \(freshDeadBody!.name)", floor: floor.index, toPrint: true)
+                hungry-=5
+                if hungry < 0 {hungry = 0}
+            } else {
+                // увеличиваем голод на 1
+                hungry += 1
+            }
+            
             return 0}
         if wantsTo <= food {
             // если еды достаточно, то полностью утоляем голод и возвращаем число съеденных порций

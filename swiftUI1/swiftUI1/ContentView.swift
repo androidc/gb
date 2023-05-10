@@ -1,4 +1,6 @@
-//Created by chizztectep on 01.05.2023 
+//Created by chizztectep on 01.05.2023
+
+// v 1.0.0
 
 import SwiftUI
 

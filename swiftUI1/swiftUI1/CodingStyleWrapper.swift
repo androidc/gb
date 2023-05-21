@@ -1,5 +1,5 @@
 //Created by chizztectep on 21.05.2023 
-
+// v 1.0.1
 import Foundation
 
 
@@ -75,6 +75,7 @@ extension String: CamelCasing {
 
         return ([first] + rest).joined(separator: "")
     }
+    
 }
 
 

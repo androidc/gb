@@ -1,6 +1,7 @@
 //Created by chizztectep on 01.05.2023
 
 // v 1.0.0
+// v 1.0.1
 
 import SwiftUI
 
@@ -9,18 +10,20 @@ struct ContentView: View {
     @State var pass = ""
     @State private var showIncorrentCredentialsWarning = false
     @Binding var isUserLoggedIn: Bool
-    @CodingStyle(codingStyle: .kebabCase) var welcomeString = "welcome to moscow"
+    @CodingStyle(codingStyle: .camelCase) var welcomeString = "welcome to moscow"
+    @CodingStyle(codingStyle: .kebabCase) var enterLogin = "Введите логин"
+    @CodingStyle(codingStyle: .snakeCase) var enterPass = "Введите пароль"
     
     var body: some View {
         
         VStack {
             Image("logo").resizable().scaledToFit()
                 .padding()
-            Text(_welcomeString.wrappedValue)
+            Text(welcomeString)
                 .padding()
-            TextField("Введите логин", text: $login)
+            TextField(enterLogin, text: $login)
                 .padding()
-            TextField("Введите пароль", text: $pass)
+            TextField(enterPass, text: $pass)
                 .padding()
             Button {
                verifyLoginData()

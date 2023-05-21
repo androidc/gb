@@ -9,12 +9,14 @@ struct ContentView: View {
     @State var pass = ""
     @State private var showIncorrentCredentialsWarning = false
     @Binding var isUserLoggedIn: Bool
+    @CodingStyle(codingStyle: .kebabCase) var welcomeString = "welcome to moscow"
     
     var body: some View {
+        
         VStack {
             Image("logo").resizable().scaledToFit()
                 .padding()
-            Text("Welcome")
+            Text(_welcomeString.wrappedValue)
                 .padding()
             TextField("Введите логин", text: $login)
                 .padding()
@@ -44,6 +46,9 @@ struct ContentView: View {
         pass = ""
     }
 }
+
+
+
 
 //struct ContentView_Previews: PreviewProvider {
 //   

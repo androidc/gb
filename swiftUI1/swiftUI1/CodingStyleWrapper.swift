@@ -47,7 +47,6 @@ struct CodingStyle<Value:CamelCasing> {
         return _codingStyle
     }
     
-    
 }
 
 protocol CamelCasing {
@@ -74,8 +73,7 @@ extension String: CamelCasing {
         let rest = parts.dropFirst().map({String($0).uppercasingFirst})
 
         return ([first] + rest).joined(separator: "")
-    }
-    
+    }    
 }
 
 

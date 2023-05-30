@@ -12,6 +12,7 @@ struct ContentView: View {
             }label: {
                 Text(isOn ? "Turn off": "Turn on")
             }
+            Switcher(isOn: $isOn)
             ActivityIndicator(isOn: $isOn)
         }
       

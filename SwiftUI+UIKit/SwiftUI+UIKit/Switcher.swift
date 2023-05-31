@@ -39,5 +39,4 @@ struct Switcher: UIViewRepresentable {
         }
     }
     
-    
 }

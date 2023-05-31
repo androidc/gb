@@ -6,6 +6,10 @@ struct ContentView: View {
     @State var isOn: Bool = false
     
     var body: some View {
+        
+        if isOn {
+            SafariController(isOn: $isOn)
+        } else {
         VStack {
             Button{
                 isOn.toggle()
@@ -15,6 +19,8 @@ struct ContentView: View {
             Switcher(isOn: $isOn)
             SwitcherOnAction(isOn: $isOn)
             ActivityIndicator(isOn: $isOn)
+            
+        }
         }
       
     }

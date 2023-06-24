@@ -2,6 +2,8 @@ import UIKit
 
 //Написать функцию, которая определяет, четное число или нет.
 
+
+
 func isOdd(_ number: Int) -> Bool {
     return (number % 2 == 0) ? true : false
 }

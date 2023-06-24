@@ -3,7 +3,7 @@
 import Vapor
 
 
-struct RegisterRequest : Content {
+struct ChangeClientRequest : Content {
     var id_user: Int
     var username: String
     var password: String
@@ -11,5 +11,4 @@ struct RegisterRequest : Content {
     var gender: String
     var credit_card: String
     var bio: String
-    
 }

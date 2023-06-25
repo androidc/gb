@@ -24,6 +24,9 @@ func routes(_ app: Application) throws {
     let catalogController = CatalogController()
     app.post("catalogData.json",use: catalogController.getCatalog)
     app.post("getGoodById.json",use: catalogController.getProduct)
+    
+    let reviewController = ReviewController()
+    app.post("getReviews.json",use: reviewController.getReviews)
 
     try app.register(collection: TodoController())
 }

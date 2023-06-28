@@ -42,4 +42,29 @@ class ReviewController {
        
         
     }
+    
+    func addReviews(_ req: Request) throws -> EventLoopFuture<AddReviewsResponse> {
+        guard let body = try? req.content.decode(AddReviewsRequest.self) else {
+            throw Abort(.badRequest)
+        }
+        
+        switch body.id_user {
+        case 123: let response = AddReviewsResponse(result: 1, userMessage: "Ваш отзыв был передан на модерацию")
+            return req.eventLoop.future(response)
+        default:
+            let response = AddReviewsResponse(result: 0, userMessage: "", errorMessage: "мы вас не знаем, идите нахер отсюда")
+            return req.eventLoop.future(response)
+        }
+    }
+    
+    func removeReview(_ req: Request) throws -> EventLoopFuture<RemoveReviewResponse> {
+        guard let body = try? req.content.decode(RemoveReviewRequest.self) else {
+            throw Abort(.badRequest)
+        }
+        
+        let response = RemoveReviewResponse(result: 1, errorMessage: nil)
+        return req.eventLoop.future(response)
+        
+        
+    }
 }

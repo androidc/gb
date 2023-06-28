@@ -27,6 +27,8 @@ func routes(_ app: Application) throws {
     
     let reviewController = ReviewController()
     app.post("getReviews.json",use: reviewController.getReviews)
+    app.post("addReview.json",use: reviewController.addReviews)
+    app.post("removeReview.json",use: reviewController.removeReview)
 
     try app.register(collection: TodoController())
 }

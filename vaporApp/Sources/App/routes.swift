@@ -29,6 +29,11 @@ func routes(_ app: Application) throws {
     app.post("getReviews.json",use: reviewController.getReviews)
     app.post("addReview.json",use: reviewController.addReviews)
     app.post("removeReview.json",use: reviewController.removeReview)
+    
+    let basketController = BasketController()
+    app.post("addBasket.json",use: basketController.addBasket)
+    app.post("removeBasket.json", use: basketController.removeBasket)
+    app.post("payBasket.json", use: basketController.payBasket)
 
     try app.register(collection: TodoController())
 }

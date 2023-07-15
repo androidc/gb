@@ -22,6 +22,12 @@ class CatalogController {
             price: 1000
         ))
         
+        response.append(CatalogDataResponse(
+            id_product: 999,
+            product_name: "Новый товар",
+            price: -1
+        ))
+        
         return req.eventLoop.future(response)
     }
     
@@ -32,14 +38,39 @@ class CatalogController {
         }
         print(body)
         
-        let response = ProductDataResponse(
-            result: 1,
-            product_name: "Ноутбук",
-            product_price: 45600,
-            product_description: "Мощный игровой ноутбук",
-            errorMessage: nil
-        )
+        var response: ProductDataResponse?
         
-        return req.eventLoop.future(response)
+        if body.id_product == 123 {
+             response = ProductDataResponse(
+                result: 1,
+                product_name: "Ноутбук",
+                product_price: 45600,
+                product_description: "Мощный игровой ноутбук",
+                errorMessage: nil
+            )
+        }
+        if body.id_product == 456 {
+            
+             response = ProductDataResponse(
+                result: 1,
+                product_name: "Мышка",
+                product_price: 1000,
+                product_description: "Обычная мышка",
+                errorMessage: nil
+            )
+        }
+        
+        if body.id_product == 999 {
+            response = ProductDataResponse(
+               result: 1,
+               product_name: "Новый товар",
+               product_price: -1,
+               product_description: "Что-то новенькое",
+               errorMessage: nil
+           )
+        }
+        
+        return req.eventLoop.future(response ?? ProductDataResponse(result: 0, product_name: "Нет такого продукта", product_price: 0, product_description: "error"))
+        
     }
 }

@@ -24,12 +24,26 @@ class AuthController {
         }
         print(body)
         
-        let response = LoginResponse(
-            result: 1,
-            user: User(id_user: 123, user_login: "geekbrains", user_name: "John", user_lastname: "Doe"),
-            errorMessage: nil
-        )
-        return req.eventLoop.future(response)
+        // check user and password
+        
+        if body.password == "111" && body.username == "111" {
+            let response = LoginResponse(
+                result: 1,
+                user: User(id_user: 123, user_login: "geekbrains", user_name: "John", user_lastname: "Doe"),
+                errorMessage: nil
+            )
+            return req.eventLoop.future(response)
+        } else {
+            let response = LoginResponse(
+                result: 0,
+                user: nil,
+                errorMessage: "user not found"
+            )
+            
+            return req.eventLoop.future(response)
+        }
+        
+        
     }
     
     func logout(_ req: Request) throws -> EventLoopFuture<LogoutResponse> {

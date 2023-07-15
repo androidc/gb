@@ -12,7 +12,7 @@ class ReviewController {
         
         
         switch body.id_product {
-            case 1:  var response: [GetReviewsResponse] = []
+            case 123:  var response: [GetReviewsResponse] = []
             response.append(GetReviewsResponse(
                 id_user: 1,
                 id_comment: 1,
@@ -21,12 +21,27 @@ class ReviewController {
             ))
             
             response.append(GetReviewsResponse(
-                id_user: 1,
+                id_user: 2,
                 id_comment: 1,
                 text: "Говно",
                 errorMessage: nil
             ))
             
+            return req.eventLoop.future(response)
+        case 456: var response: [GetReviewsResponse] = []
+            response.append(GetReviewsResponse(
+                id_user: 1,
+                id_comment: 1,
+                text: "Хорошая мышка",
+                errorMessage: nil
+            ))
+            
+            response.append(GetReviewsResponse(
+                id_user: 2,
+                id_comment: 1,
+                text: "Плохая мышка",
+                errorMessage: nil
+            ))
             return req.eventLoop.future(response)
          default:
             var response: [GetReviewsResponse] = []

@@ -34,6 +34,7 @@ func routes(_ app: Application) throws {
     app.post("addBasket.json",use: basketController.addBasket)
     app.post("removeBasket.json", use: basketController.removeBasket)
     app.post("payBasket.json", use: basketController.payBasket)
+    app.post("getBasket.json", use: basketController.getBasket)
 
     try app.register(collection: TodoController())
 }

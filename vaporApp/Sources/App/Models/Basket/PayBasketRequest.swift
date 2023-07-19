@@ -4,4 +4,5 @@ import Vapor
 
 struct PayBasketRequest: Content {
     var id_user: Int
+    var paymentSum: Int
 }

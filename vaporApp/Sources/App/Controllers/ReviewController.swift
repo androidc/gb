@@ -23,7 +23,7 @@ class ReviewController {
             response.append(GetReviewsResponse(
                 id_user: 2,
                 id_comment: 1,
-                text: "Говно",
+                text: "Так себе",
                 errorMessage: nil
             ))
             

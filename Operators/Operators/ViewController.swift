@@ -7,9 +7,14 @@ class ViewController: UIViewController {
     
     private var subscriptions = Set<AnyCancellable>()
     private var count: Int = 0
+    
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+
+     
         // публикация коллекции чисел от 1 до 100
         let values = Array(0...100)
         let publisher = values.publisher

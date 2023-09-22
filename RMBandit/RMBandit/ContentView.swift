@@ -38,11 +38,13 @@ struct ContentView: View {
                     self.stopTimer(reason: StaticVars.byButton)
                 }
        
+            } .alert("Bingo!", isPresented: $showAlert) {
+                Button("OK", role: .cancel) { }
             }
             
             Stepper("Max random avatars: \(Int(number))",
                                value: $number,
-                               in: 0...100,
+                               in: 1...100,
                                step: 1)
          }
     }
@@ -50,18 +52,22 @@ struct ContentView: View {
     
     func stopTimer(reason: Int) {
            self.timer.upstream.connect().cancel()
+           
         
        }
        
        func startTimer() {
            self.timer = Timer.publish(every: 0.5, on: .main, in: .common).autoconnect()
+           showAlert = false
            timer
            .sink { _ in
               let id1 = randomImage(imgPos: 1)
               let id2 = randomImage(imgPos: 2)
               let id3 = randomImage(imgPos: 3)
-               if id1 == id2, id2 == id3 {
+               if id1 == id2 && id2 == id3 {
                    stopTimer(reason: StaticVars.byAction)
+                   start_stop.toggle()
+                   showAlert = true
                }
            }
           .store(in: &subscriptions)
